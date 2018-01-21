@@ -13,7 +13,7 @@ export default class Home extends Component {
             <View
                 style={{
                     alignItems: 'center', flexDirection: 'row',
-                    justifyContent: 'space-between', backgroundColor: '#00e640',
+                    justifyContent: 'space-between', backgroundColor: '#5564B1',
                     padding: 10
                 }}
             >
@@ -21,25 +21,18 @@ export default class Home extends Component {
                     onPress={() => { this.props.drawerNavigator.navigate('DrawerOpen') }}>
                     <Image
                         source={require('../images/menu.png')}
-                        style={styles.icon}
+                        style={{ width: 26, height: 26 }}
                     />
                 </TouchableOpacity>
 
-                <Text style={{ fontSize: 20 }}>Home</Text>
+                <Text style={{ fontSize: 20, color: 'white' }}>Home</Text>
                 <TouchableOpacity>
                     <Image
                         source={require('../images/grid.png')}
-                        style={styles.icon}
+                        style={{ width: 26, height: 26 }}
                     />
                 </TouchableOpacity>
             </View>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    icon: {
-        width: 26,
-        height: 26,
-    },
-});

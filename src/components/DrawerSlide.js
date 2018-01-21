@@ -6,14 +6,17 @@ import {
     Text,
     View, Image, Dimensions, ScrollView, TouchableOpacity
 } from 'react-native';
+
 var { height, width } = Dimensions.get('window');
 
 export default class DrawerSlide extends Component {
     render() {
         return (
-            <ScrollView>
+            <ScrollView
+                style={{ marginTop: 25, marginLeft: 10, marginRight: 10 }}
+            >
                 <View
-                    style={{ alignItems: 'center', marginTop: 34 }}
+                    style={{ alignItems: 'center' }}
                 >
                     <TouchableOpacity>
                         <Image
@@ -28,7 +31,7 @@ export default class DrawerSlide extends Component {
                 </View>
 
                 <View
-                    style={{ flexDirection: 'row', alignItems: 'center', margin: 5 }}>
+                    style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
                     <Image
                         source={require('../images/birthday.png')}
                         style={{ width: 24, height: 24 }}
@@ -37,7 +40,7 @@ export default class DrawerSlide extends Component {
                 </View>
 
                 <View
-                    style={{ flexDirection: 'row', alignItems: 'center', margin: 5 }}>
+                    style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
                     <Image
                         source={require('../images/email.png')}
                         style={{ width: 24, height: 24 }}
@@ -46,7 +49,7 @@ export default class DrawerSlide extends Component {
                 </View>
 
                 <View
-                    style={{ flexDirection: 'row', alignItems: 'center', margin: 5 }}>
+                    style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
                     <Image
                         source={require('../images/gender.png')}
                         style={{ width: 24, height: 24 }}
@@ -60,20 +63,20 @@ export default class DrawerSlide extends Component {
                     }}
                     style={{
                         alignSelf: 'center', alignItems: 'center', justifyContent: 'center',
-                        backgroundColor: "#00e640",
+                        backgroundColor: "#394AA5",
                         height: 35, width: 80,
                         borderRadius: 10, marginBottom: 15
                     }}>
                     <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Edit</Text>
                 </TouchableOpacity>
 
-                <Text style={{ marginLeft: 5, fontWeight: 'bold' }}>Reminder List:</Text>
+                <Text style={{ fontWeight: 'bold' }}>Reminder List:</Text>
 
-                <View style={{ margin: 5, padding: 5, backgroundColor: 'cyan' }}>
+                <View style={{ marginTop: 5, padding: 5, backgroundColor: '#20BCBC' }}>
                     <Text>The Dark Tower - 2017 - 5.6/10</Text>
                     <Text>2017-09-02 10:06</Text>
                 </View>
-                <View style={{ margin: 5, padding: 5, backgroundColor: 'cyan' }}>
+                <View style={{ marginTop: 5, padding: 5, backgroundColor: '#20BCBC' }}>
                     <Text>Ananbelle: Creation - 2017 - 6.4/10</Text>
                     <Text>2017-09-03 10:06</Text>
                 </View>
@@ -84,7 +87,7 @@ export default class DrawerSlide extends Component {
                     }}
                     style={{
                         alignSelf: 'center', alignItems: 'center', justifyContent: 'center',
-                        backgroundColor: "#00e640",
+                        backgroundColor: "#394AA5",
                         height: 35, width: 80,
                         borderRadius: 10,
                         marginTop: 10, marginBottom: 5

@@ -4,17 +4,17 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View,Image
+    View, Image
 } from 'react-native';
 
 export default class Favorites extends Component {
 
     static navigationOptions = {
-        tabBarLabel: 'Favorite movies',
+        tabBarLabel: 'Favorite',
         tabBarIcon: ({ tintColor }) => (
             <Image
                 source={require('../images/favorite.png')}
-                style={[styles.icon, { tintColor: tintColor }]}
+                style={{ width: 26, height: 26, }}
             />
         ),
     };
@@ -25,10 +25,3 @@ export default class Favorites extends Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    icon: {
-        width: 26,
-        height: 26,
-    },
-});

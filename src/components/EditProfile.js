@@ -40,19 +40,19 @@ export default class EditProfile extends Component {
     render() {
         return (
             <View
-                style={{ marginTop: Platform.OS == 'ios' ? 34 : 0 }}
+                style={{ marginTop: 25, marginLeft: 10, marginRight: 10 }}
             >
                 <View
                     style={{
                         flexDirection: 'row', justifyContent: 'space-between',
-                        marginLeft: 10, marginRight: 10
+
                     }}
                 >
                     <TouchableOpacity
                         onPress={() => { this.props.navigation.navigate('Tabs') }}
                         style={{
                             alignItems: 'center', justifyContent: 'center',
-                            backgroundColor: "red",
+                            backgroundColor: "#20BCBC",
                             height: 35, width: 80,
                             borderRadius: 10
                         }}>
@@ -74,13 +74,13 @@ export default class EditProfile extends Component {
                                 }}
                             />
                         </TouchableOpacity>
-                        <Text style={{ marginTop: 10, fontWeight: 'bold', textAlign: 'center' }}>Quan (Quinto) H. Dinh</Text>
+                        <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>Quan (Quinto) H. Dinh</Text>
                     </View>
                     <TouchableOpacity
                         onPress={() => { this.props.navigation.navigate('Tabs') }}
                         style={{
                             alignItems: 'center', justifyContent: 'center',
-                            backgroundColor: "blue",
+                            backgroundColor: "#057AFF",
                             height: 35, width: 80,
                             borderRadius: 10
                         }}>
