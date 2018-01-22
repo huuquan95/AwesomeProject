@@ -47,7 +47,7 @@ class TabsComponent extends Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
-                <Header drawerNavigator={this.props.drawerNavigator} />
+                {/* <Header drawerNavigator={this.props.drawerNavigator} /> */}
                 <Tabs />
             </View>
         );

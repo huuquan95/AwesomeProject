@@ -14,6 +14,7 @@ export default class ReminderItem extends Component {
 
     render() {
         const swipeoutConfigs = {
+            backgroundColor: 'white',
             autoClose: true,
             onClose: () => { },
             onOpen: () => { },
@@ -24,13 +25,13 @@ export default class ReminderItem extends Component {
                             'Alert',
                             'Are you sure you want to delete this reminder?',
                             [{
-                                text: 'No',
+                                text: 'Cancel',
                                 onPress: () => {
                                     // alert('No')
                                 }
                             },
                             {
-                                text: 'Yes',
+                                text: 'OK',
                                 onPress: () => {
                                     alert('Deleted successful')
                                 }
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
     item: {
         marginLeft: 10, marginTop: 10, marginRight: 10, paddingBottom: 10,
         flexDirection: 'row',
-        borderBottomColor: 'cyan', borderBottomWidth: 0.5
+        borderBottomColor: 'cyan', borderBottomWidth: 0.5,
     },
     normalText: {
         fontSize: 20

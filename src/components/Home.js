@@ -30,19 +30,20 @@ export default class Home extends Component {
     };
 
     fetchData() {
-        if (this.state.pageLoading <= 2)
-            fetch('https://api.themoviedb.org/3/movie/popular?api_key=0267c13d8c7d1dcddb40001ba6372235&page=' + this.state.pageLoading)
-                .then((response) => response.json())
-                .then((res) => {
-                    this.setState((previousState) => {
-                        return {
-                            ...previousState,
-                            refreshing: false,
-                            popularMovies: previousState.popularMovies.concat(res.results)
-                        }
-                    })
+        fetch('https://api.themoviedb.org/3/movie/popular?api_key=0267c13d8c7d1dcddb40001ba6372235')
+            .then((response) => response.json())
+            .then((res) => {
+                this.setState((previousState) => {
+                    return {
+                        ...previousState,
+                        refreshing: false,
+                        pageLoading: 2,
+                        popularMovies: res.results
+                    }
                 })
+            })
     }
+
     componentWillMount() {
         this.fetchData();
     }
@@ -62,16 +63,6 @@ export default class Home extends Component {
                 data={this.state.popularMovies}
                 keyExtractor={(item, index) => item.id}
                 renderItem={({ item }) => <DetailItem {...item} />}
-                onEndReachedThreshold={0.2}
-                onEndReached={() => {
-                    this.setState((previousState) => {
-                        return {
-                            ...previousState, pageLoading: previousState.pageLoading + 1
-                        }
-                    })
-                    this.fetchData();
-                }
-                }
             />
         );
     }
