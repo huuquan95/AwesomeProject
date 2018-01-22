@@ -99,5 +99,3 @@ export default class DrawerSlide extends Component {
         );
     }
 }
-
-// Should margin bigest component instead of margin children components

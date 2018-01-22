@@ -28,8 +28,8 @@ export default class DetailItem extends Component {
                     style={styles.row1}
                 >
                     <Text
-                        style={styles.title}
-                    >Death Note</Text>
+                        style={styles.title} numberOfLines={1}
+                    >{this.props.title}</Text>
                     <TouchableOpacity
                         onPress={() => this.setState({ checked: !this.state.checked })}
                     >
@@ -43,7 +43,7 @@ export default class DetailItem extends Component {
                     style={styles.directionRow}
                 >
                     <Image
-                        source={require('../images/default_avatar.png')}
+                        source={{ uri: 'https://image.tmdb.org/t/p/w185/' + this.props.poster_path }}
                         style={styles.image}
                     ></Image>
                     <View style={{ paddingLeft: 10 }}>
@@ -51,16 +51,18 @@ export default class DetailItem extends Component {
                             style={[styles.directionRow, { marginBottom: 10, marginTop: 4 }]}
                         >
                             <Text style={styles.normalText}>Realease date:  </Text>
-                            <Text style={styles.importantText}> 2017 - 08 - 25</Text>
+                            <Text style={styles.importantText}> {this.props.release_date}</Text>
                         </View>
                         <View
                             style={[styles.directionRow, { marginBottom: 25 }]}
                         >
                             <Text style={styles.normalText}>Rating:  </Text>
-                            <Text style={styles.importantText}>4.6/10</Text>
+                            <Text style={styles.importantText}>{this.props.vote_average}/10</Text>
                         </View>
                         <Text style={styles.importantText}>Overview:</Text>
-                        <Text style={[styles.normalText, { width: width * 3 / 5 - 20 }]}>A young man comes to possess a supernatural notebook, the Death Note...</Text>
+                        <Text style={[styles.normalText, { width: width * 3 / 5 - 20 }]} numberOfLines={3} >
+                            {this.props.overview}
+                        </Text>
                     </View>
                 </View>
             </View >
@@ -70,14 +72,16 @@ export default class DetailItem extends Component {
 
 const styles = StyleSheet.create({
     row1: {
-        flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5
+        flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5,
+        width: width - 20
     },
     directionRow: {
         flexDirection: 'row'
     }
     ,
     title: {
-        fontSize: 20, fontWeight: 'bold', color: '#000000'
+        fontSize: 20, fontWeight: 'bold', color: '#000000',
+        width: width - 48
     },
     star: {
         height: 24, width: 24
@@ -87,7 +91,7 @@ const styles = StyleSheet.create({
     },
     item: {
         marginLeft: 10, marginTop: 10, marginRight: 10, paddingBottom: 5,
-        borderBottomWidth: 1, borderBottomColor: 'cyan'
+        borderBottomWidth: 0.5, borderBottomColor: 'cyan'
     },
     importantText: {
         color: 'red'

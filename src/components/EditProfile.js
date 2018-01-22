@@ -12,12 +12,11 @@ var { height, width } = Dimensions.get('window');
 
 var ImagePicker = require('react-native-image-picker');
 
-// More info on all the options is below in the README...just some common use cases shown here
 var options = {
-    title: 'Select Avatar',
-    customButtons: [
-        { name: 'fb', title: 'Choose Photo from Facebook' },
-    ],
+    // title: 'Select Avatar',
+    // customButtons: [
+    //     { name: 'fb', title: 'Choose Photo from Facebook' },
+    // ],
     storageOptions: {
         skipBackup: true,
         path: 'images'
@@ -62,7 +61,6 @@ export default class EditProfile extends Component {
                         <TouchableOpacity
                             onPress={() => {
                                 ImagePicker.launchImageLibrary(options, (response) => {
-                                    // Same code as in above section!
                                 });
                             }}
                         >
@@ -115,7 +113,7 @@ export default class EditProfile extends Component {
                     />
 
                     <View
-                        style={{ flexDirection: 'row', flex: 2 }}
+                        style={{ flexDirection: 'row' }}
                     >
 
                         <RadioButton

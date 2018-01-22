@@ -35,9 +35,8 @@ const Tabs = TabNavigator(
         tabBarPosition: 'bottom',
         animationEnabled: true,
         tabBarOptions: {
-            activeTintColor: '#00e640',
-            activeBackgroundColor: 'orange',
-            inactiveBackgroundColor: 'blue',
+            activeBackgroundColor: '#5564B1',
+            inactiveBackgroundColor: '#5564B1',
             upperCaseLabel: false
         },
         swipeEnabled: true,
