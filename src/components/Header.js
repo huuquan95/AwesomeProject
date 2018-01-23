@@ -7,7 +7,7 @@ import {
     View, Image, TouchableHighlight, TouchableOpacity,
 } from 'react-native';
 
-export default class Home extends Component {
+export default class Header extends Component {
     render() {
         return (
             <View
@@ -18,7 +18,7 @@ export default class Home extends Component {
                 }}
             >
                 <TouchableOpacity
-                    onPress={() => { this.props.drawerNavigator.navigate('DrawerOpen') }}>
+                    onPress={() => { details.drawerNavigation.navigate('DrawerOpen') }}>
                     <Image
                         source={require('../images/menu.png')}
                         style={{ width: 26, height: 26 }}

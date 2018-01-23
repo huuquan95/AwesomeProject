@@ -9,7 +9,7 @@ import {
 const starChecked = require('../images/star_checked.png');
 const startUnchecked = require('../images/star_unchecked.png');
 var { height, width } = Dimensions.get('window');
-
+    
 export default class DetailItem extends Component {
 
     constructor(props) {
@@ -18,18 +18,17 @@ export default class DetailItem extends Component {
             checked: false
         }
     }
-
     render() {
+        var { details, navigation } = this.props;
+
         return (
-            <View
-                style={styles.item}
-            >
-                <View
-                    style={styles.row1}
-                >
-                    <Text
-                        style={styles.title} numberOfLines={1}
-                    >{this.props.title}</Text>
+            <View style={styles.item}>
+                <View style={styles.row1}>
+
+                    <Text style={styles.title} numberOfLines={1} >
+                        {details.title}
+                    </Text>
+
                     <TouchableOpacity
                         onPress={() => this.setState({ checked: !this.state.checked })}
                     >
@@ -39,30 +38,38 @@ export default class DetailItem extends Component {
                         />
                     </TouchableOpacity>
                 </View>
-                <View
-                    style={styles.directionRow}
-                >
-                    <Image
-                        source={{ uri: 'https://image.tmdb.org/t/p/w185/' + this.props.poster_path }}
-                        style={styles.image}
-                    ></Image>
+
+                <View style={styles.directionRow}>
+
+                    <TouchableOpacity onPress={() => { navigation.navigate('MovieDetail', { details: this.props.details }) }}   >
+                        <Image
+                            source={{ uri: 'https://image.tmdb.org/t/p/w185/' + details.poster_path }}
+                            style={styles.image}
+                        ></Image>
+                    </TouchableOpacity>
+
                     <View style={{ paddingLeft: 10 }}>
+
                         <View
                             style={[styles.directionRow, { marginBottom: 10, marginTop: 4 }]}
                         >
                             <Text style={styles.normalText}>Realease date:  </Text>
-                            <Text style={styles.importantText}> {this.props.release_date}</Text>
+                            <Text style={styles.importantText}> {details.release_date}</Text>
                         </View>
+
                         <View
                             style={[styles.directionRow, { marginBottom: 25 }]}
                         >
                             <Text style={styles.normalText}>Rating:  </Text>
-                            <Text style={styles.importantText}>{this.props.vote_average}/10</Text>
+                            <Text style={styles.importantText}>{details.vote_average}/10</Text>
                         </View>
+
                         <Text style={styles.importantText}>Overview:</Text>
+
                         <Text style={[styles.normalText, { width: width * 3 / 5 - 20 }]} numberOfLines={3} >
-                            {this.props.overview}
+                            {details.overview}
                         </Text>
+
                     </View>
                 </View>
             </View >

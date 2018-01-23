@@ -12,29 +12,78 @@ import EditProfile from './components/EditProfile';
 import DrawerSlide from './components/DrawerSlide';
 import About from './components/About';
 import Settings from './components/Settings';
+import MovieDetail from './components/MovieDetail';
 import { StackNavigator, DrawerNavigator, TabNavigator } from 'react-navigation';
 
 StatusBar.setHidden(true);
 
+const HomeStack = StackNavigator(
+    {
+        Home: { screen: Home },
+        MovieDetail: { screen: MovieDetail }
+    }
+)
+
+const FavoritesStack = StackNavigator(
+    {
+        Favorites: { screen: Favorites },
+        MovieDetail: { screen: MovieDetail }
+    }
+)
+
 const Tabs = TabNavigator(
     {
-        Home: {
-            screen: Home
+        HomeStack: {
+            screen: HomeStack,
+            navigationOptions: ({ navigation }) => ({
+                tabBarLabel: 'Home',
+                tabBarIcon: ({ tintColor }) => (
+                    <Image
+                        source={require('./images/home.png')}
+                        style={{ height: 24, width: 24, tintColor: tintColor }}
+                    />
+                )
+            }),
         },
-        Favorites: {
-            screen: Favorites
+        FavoritesStack: {
+            screen: FavoritesStack,
+            navigationOptions: ({ navigation }) => ({
+                tabBarLabel: 'Favorite',
+                tabBarIcon: ({ tintColor }) => (
+                    <Image
+                        source={require('./images/heart.png')}
+                        style={{ height: 24, width: 24, tintColor: tintColor }}
+                    />)
+            }),
         },
         Settings: {
-            screen: Settings
+            screen: Settings,
+            navigationOptions: ({ navigation }) => ({
+                tabBarLabel: 'Settings',
+                tabBarIcon: ({ tintColor }) => (
+                    <Image
+                        source={require('./images/settings.png')}
+                        style={{ height: 24, width: 24, tintColor: tintColor }}
+                    />)
+            }),
         },
         About: {
-            screen: About
+            screen: About,
+            navigationOptions: ({ navigation }) => ({
+                tabBarLabel: 'About',
+                tabBarIcon: ({ tintColor }) => (
+                    <Image
+                        source={require('./images/about.png')}
+                        style={{ height: 24, width: 24, tintColor: tintColor }}
+                    />)
+            }),
         }
     },
     {
         tabBarPosition: 'bottom',
         animationEnabled: true,
         tabBarOptions: {
+            activeTintColor: 'white',
             activeBackgroundColor: '#5564B1',
             inactiveBackgroundColor: '#5564B1',
             upperCaseLabel: false
@@ -43,21 +92,10 @@ const Tabs = TabNavigator(
     }
 )
 
-class TabsComponent extends Component {
-    render() {
-        return (
-            <View style={{ flex: 1 }}>
-                {/* <Header drawerNavigator={this.props.drawerNavigator} /> */}
-                <Tabs />
-            </View>
-        );
-    }
-}
-
 const Drawer = DrawerNavigator(
     {
         Tabs: {
-            screen: props => <TabsComponent drawerNavigator={props.navigation} />
+            screen: Tabs
         },
         EditProfile: {
             screen: EditProfile

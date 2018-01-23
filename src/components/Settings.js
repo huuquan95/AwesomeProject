@@ -9,16 +9,6 @@ import {
 
 export default class Settings extends Component {
 
-    static navigationOptions = {
-        tabBarLabel: 'Settings',
-        tabBarIcon: ({ tintColor }) => (
-            <Image
-                source={require('../images/settings.png')}
-                style={[styles.icon, { tintColor: tintColor }]}
-            />
-        ),
-    };
-
     state = {}
     render() {
         return (

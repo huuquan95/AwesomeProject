@@ -59,7 +59,7 @@ export default class DrawerSlide extends Component {
 
                 <TouchableOpacity
                     onPress={() => {
-                        this.props.navigation.navigate("EditProfile")
+                        details.navigation.navigate("EditProfile")
                     }}
                     style={{
                         alignSelf: 'center', alignItems: 'center', justifyContent: 'center',
@@ -83,7 +83,7 @@ export default class DrawerSlide extends Component {
 
                 <TouchableOpacity
                     onPress={() => {
-                        this.props.navigation.navigate("EditProfile")
+                        details.navigation.navigate("EditProfile")
                     }}
                     style={{
                         alignSelf: 'center', alignItems: 'center', justifyContent: 'center',

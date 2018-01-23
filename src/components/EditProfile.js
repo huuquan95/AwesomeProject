@@ -48,7 +48,7 @@ export default class EditProfile extends Component {
                     }}
                 >
                     <TouchableOpacity
-                        onPress={() => { this.props.navigation.navigate('Tabs') }}
+                        onPress={() => { details.navigation.navigate('Tabs') }}
                         style={{
                             alignItems: 'center', justifyContent: 'center',
                             backgroundColor: "#20BCBC",
@@ -75,7 +75,7 @@ export default class EditProfile extends Component {
                         <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>Quan (Quinto) H. Dinh</Text>
                     </View>
                     <TouchableOpacity
-                        onPress={() => { this.props.navigation.navigate('Tabs') }}
+                        onPress={() => { details.navigation.navigate('Tabs') }}
                         style={{
                             alignItems: 'center', justifyContent: 'center',
                             backgroundColor: "#057AFF",

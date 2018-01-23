@@ -9,16 +9,6 @@ import {
 
 export default class About extends Component {
 
-    static navigationOptions = {
-        tabBarLabel: 'About',
-        tabBarIcon: ({ tintColor }) => (
-            <Image
-                source={require('../images/about.png')}
-                style={[styles.icon, { tintColor: tintColor }]}
-            />
-        ),
-    };
-
     state = {}
     render() {
         return (
