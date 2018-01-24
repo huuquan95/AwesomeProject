@@ -28,7 +28,7 @@ export default class MovieDatail extends Component {
                 style={{
                     alignItems: 'center', flexDirection: 'row',
                     justifyContent: 'space-between', backgroundColor: '#5564B1',
-                    padding: 12
+                    height: 50, paddingLeft: 10, paddingRight: 10
                 }}
             >
 
@@ -49,7 +49,9 @@ export default class MovieDatail extends Component {
     }
 
     componentWillMount() {
-        fetch('http://api.themoviedb.org/3/movie/' + this.props.navigation.state.params.details.id + '/credits?api_key=0267c13d8c7d1dcddb40001ba6372235')
+        fetch('https://api.themoviedb.org/3/movie/' +
+            this.props.navigation.state.params.details.id +
+            '/credits?api_key=0267c13d8c7d1dcddb40001ba6372235')
             .then((response) => response.json())
             .then((res) => {
                 this.setState((previousState) => {
@@ -59,6 +61,7 @@ export default class MovieDatail extends Component {
                     }
                 })
             })
+            .catch((err) => { alert(err) });
     }
 
     render() {
@@ -160,7 +163,7 @@ export default class MovieDatail extends Component {
                                     source={{ uri: 'https://image.tmdb.org/t/p/w185/' + item.profile_path }}
                                     style={{ width: width / 4, height: width * 1.2 / 4 }}
                                 ></Image>
-                                <Text numberOfLines={1}>{item.name}</Text>
+                                <Text>{item.name}</Text>
                             </View>
                         )}
                     />

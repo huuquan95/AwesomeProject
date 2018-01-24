@@ -13,6 +13,7 @@ import DrawerSlide from './components/DrawerSlide';
 import About from './components/About';
 import Settings from './components/Settings';
 import MovieDetail from './components/MovieDetail';
+import TopRatedMovies from './components/TopRatedMovies';
 import { StackNavigator, DrawerNavigator, TabNavigator } from 'react-navigation';
 
 StatusBar.setHidden(true);
@@ -31,12 +32,20 @@ const FavoritesStack = StackNavigator(
     }
 )
 
+const SettingsStack = StackNavigator(
+    {
+        Settings: { screen: Settings },
+        TopRatedMovies: { screen: TopRatedMovies }
+    }
+)
+
+
 const Tabs = TabNavigator(
     {
         HomeStack: {
             screen: HomeStack,
             navigationOptions: ({ navigation }) => ({
-                tabBarLabel: 'Home',
+                tabBarLabel: 'Movies',
                 tabBarIcon: ({ tintColor }) => (
                     <Image
                         source={require('./images/home.png')}
@@ -48,7 +57,7 @@ const Tabs = TabNavigator(
         FavoritesStack: {
             screen: FavoritesStack,
             navigationOptions: ({ navigation }) => ({
-                tabBarLabel: 'Favorite',
+                tabBarLabel: 'Favorites',
                 tabBarIcon: ({ tintColor }) => (
                     <Image
                         source={require('./images/heart.png')}
@@ -56,8 +65,8 @@ const Tabs = TabNavigator(
                     />)
             }),
         },
-        Settings: {
-            screen: Settings,
+        SettingsStack: {
+            screen: SettingsStack,
             navigationOptions: ({ navigation }) => ({
                 tabBarLabel: 'Settings',
                 tabBarIcon: ({ tintColor }) => (

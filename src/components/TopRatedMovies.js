@@ -9,30 +9,29 @@ import {
 import DetailItem from './DetailItem';
 import Header from './Header';
 
-export default class Home extends Component {
+export default class TopRatedMovies extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             popularMovies: [],
             refreshing: false,
-            pageLoading: 1,
-            title: ''
+            pageLoading: 1
         }
     }
 
     static navigationOptions = ({ navigation }) => {
-        const { params = {} } = navigation.state;
+        // const { params = {} } = navigation.state;
 
-        let header = (<Header navigation={navigation} title={params.title} />)
+        let header = (<Header navigation={navigation} title={'Top Rated'} />)
 
-        let headerBackTitle = 'Popular';
+        let headerBackTitle = 'Top Rated';
 
         return { header, headerBackTitle };
     }
 
     fetchData() {
-        fetch('https://api.themoviedb.org/3/movie/popular?api_key=0267c13d8c7d1dcddb40001ba6372235')
+        fetch('https://api.themoviedb.org/3/movie/top_rated?api_key=0267c13d8c7d1dcddb40001ba6372235')
             .then((response) => response.json())
             .then((res) => {
                 this.setState((previousState) => {
@@ -51,9 +50,6 @@ export default class Home extends Component {
     }
 
     render() {
-        // var { params } = this.props.navigation.state
-        // if (params != undefined)
-        //     console.log('params: ', params.type)
         return (
             <View>
                 <FlatList
