@@ -4,22 +4,16 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View, Image
+    View, Image, WebView
 } from 'react-native';
 
 export default class About extends Component {
 
-    state = {}
     render() {
         return (
-            <Text>About</Text>
+            <WebView
+                source={{ uri: 'https://www.themoviedb.org/about/our-history' }}
+            />
         );
     }
 }
-
-const styles = StyleSheet.create({
-    icon: {
-        width: 26,
-        height: 26,
-    },
-});

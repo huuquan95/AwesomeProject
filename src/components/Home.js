@@ -17,7 +17,6 @@ export default class Home extends Component {
             popularMovies: [],
             refreshing: false,
             pageLoading: 1,
-            title: ''
         }
     }
 
@@ -25,14 +24,16 @@ export default class Home extends Component {
         const { params = {} } = navigation.state;
 
         let header = (<Header navigation={navigation} title={params.title} />)
-
         let headerBackTitle = 'Popular';
 
         return { header, headerBackTitle };
     }
 
     fetchData() {
-        fetch('https://api.themoviedb.org/3/movie/popular?api_key=0267c13d8c7d1dcddb40001ba6372235')
+        var { params = { type: 'popular' } } = this.props.navigation.state;
+        url = "https://api.themoviedb.org/3/movie/" + params.type + "?api_key=0267c13d8c7d1dcddb40001ba6372235";
+
+        fetch(url)
             .then((response) => response.json())
             .then((res) => {
                 this.setState((previousState) => {

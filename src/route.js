@@ -32,14 +32,6 @@ const FavoritesStack = StackNavigator(
     }
 )
 
-const SettingsStack = StackNavigator(
-    {
-        Settings: { screen: Settings },
-        TopRatedMovies: { screen: TopRatedMovies }
-    }
-)
-
-
 const Tabs = TabNavigator(
     {
         HomeStack: {
@@ -65,8 +57,8 @@ const Tabs = TabNavigator(
                     />)
             }),
         },
-        SettingsStack: {
-            screen: SettingsStack,
+        Settings: {
+            screen: Settings,
             navigationOptions: ({ navigation }) => ({
                 tabBarLabel: 'Settings',
                 tabBarIcon: ({ tintColor }) => (
