@@ -5,18 +5,15 @@ import {
     StyleSheet,
     Text,
     View, Image,
-    TouchableOpacity, Dimensions
+    TouchableOpacity, Dimensions, Alert
 } from 'react-native';
+import DateTimePicker from 'react-native-modal-datetime-picker';
 import RadioButton from 'radio-button-react-native';
 var { height, width } = Dimensions.get('window');
 
 var ImagePicker = require('react-native-image-picker');
 
 var options = {
-    // title: 'Select Avatar',
-    // customButtons: [
-    //     { name: 'fb', title: 'Choose Photo from Facebook' },
-    // ],
     storageOptions: {
         skipBackup: true,
         path: 'images'
@@ -28,13 +25,29 @@ export default class EditProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: 0
+            value: 0,
+            isDateTimePickerVisible: false,
+            date: "11/26/1995"
         }
     }
 
     handleOnPress(value) {
         this.setState({ value: value })
     }
+
+    _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
+
+    _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
+
+    _handleDatePicked = (date) => {
+        this.setState((previousState) => {
+            return {
+                ...previousState,
+                date: ((date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear())
+            }
+        })
+        this._hideDateTimePicker();
+    };
 
     render() {
         return (
@@ -86,14 +99,15 @@ export default class EditProfile extends Component {
                     </TouchableOpacity>
                 </View>
 
-                <View
+                <TouchableOpacity
+                    onPress={this._showDateTimePicker}
                     style={{ flexDirection: 'row', alignItems: 'center', margin: 5 }}>
                     <Image
                         source={require('../images/birthday.png')}
                         style={{ width: 24, height: 24 }}
                     />
-                    <Text style={{ marginLeft: 10 }}>26/11/1995</Text>
-                </View>
+                    <Text style={{ marginLeft: 10 }}>{this.state.date}</Text>
+                </TouchableOpacity>
 
                 <View
                     style={{ flexDirection: 'row', alignItems: 'center', margin: 5 }}>
@@ -134,6 +148,13 @@ export default class EditProfile extends Component {
 
                     </View>
                 </View>
+                <DateTimePicker
+                    isVisible={this.state.isDateTimePickerVisible}
+                    onConfirm={this._handleDatePicked}
+                    onCancel={this._hideDateTimePicker}
+                    mode={'date'}
+                    date={new Date(this.state.date)}
+                />
             </View>
         );
     }

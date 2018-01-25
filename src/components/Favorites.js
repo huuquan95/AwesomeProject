@@ -4,15 +4,48 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View, Image
+    View, Image, FlatList
 } from 'react-native';
+import Header from './Header';
+import DetailItem from './DetailItem';
 
 export default class Favorites extends Component {
 
-    state = {}
+    constructor(props) {
+        super(props);
+        this.state = {
+            refreshing: false,
+        }
+    }
+
+    static navigationOptions = ({ navigation }) => {
+
+        let header = (<Header navigation={navigation} title={'Favorites'} isShowListIcon={false} />)
+        // let headerBackTitle = 'Settings';
+
+        return { header };
+    }
+
     render() {
         return (
-            <Text>Favorites</Text>
+            <FlatList
+                refreshing={this.state.refreshing}
+
+                onRefresh={() => {
+                    this.setState((previousState) => {
+                        return {
+                            ...previousState, refreshing: true
+                        }
+                    })
+                }}
+
+                data={['a', 'b']}
+                keyExtractor={(item, index) => item.id}
+                renderItem={({ item }) =>
+                    // <DetailItem details={item} navigation={this.props.navigation} />
+                    <DetailItem />
+                }
+            />
         );
     }
 }

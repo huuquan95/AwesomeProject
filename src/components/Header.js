@@ -27,6 +27,7 @@ export default class Header extends Component {
                 </TouchableOpacity>
 
                 <Text style={{ fontSize: 20, color: 'white' }}>{this.props.title}</Text>
+
                 <TouchableOpacity>
                     {this.props.isShowListIcon != false ?
                         <Image
@@ -34,7 +35,6 @@ export default class Header extends Component {
                             style={{ width: 26, height: 26 }}
                         />
                         : <View style={{ width: 26 }} />}
-
                 </TouchableOpacity>
             </View>
         );

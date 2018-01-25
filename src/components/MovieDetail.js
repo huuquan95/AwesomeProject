@@ -65,7 +65,7 @@ export default class MovieDatail extends Component {
     }
 
     render() {
-        var { details } = this.props.navigation.state.params
+        var { details } = this.props.navigation.state.params;
         return (
             <ScrollView>
                 <View style={styles.item}>

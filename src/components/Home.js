@@ -52,26 +52,24 @@ export default class Home extends Component {
 
     render() {
         return (
-            <View>
-                <FlatList
-                    refreshing={this.state.refreshing}
+            <FlatList
+                refreshing={this.state.refreshing}
 
-                    onRefresh={() => {
-                        this.setState((previousState) => {
-                            return {
-                                ...previousState, refreshing: true
-                            }
-                        })
-                        this.fetchData()
-                    }}
+                onRefresh={() => {
+                    this.setState((previousState) => {
+                        return {
+                            ...previousState, refreshing: true
+                        }
+                    })
+                    this.fetchData()
+                }}
 
-                    data={this.state.popularMovies}
-                    keyExtractor={(item, index) => item.id}
-                    renderItem={({ item }) =>
-                        <DetailItem details={item} navigation={this.props.navigation} />
-                    }
-                />
-            </View>
+                data={this.state.popularMovies}
+                keyExtractor={(item, index) => item.id}
+                renderItem={({ item }) =>
+                    <DetailItem details={item} navigation={this.props.navigation} />
+                }
+            />
         );
     }
 }
