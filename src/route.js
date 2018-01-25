@@ -13,7 +13,6 @@ import DrawerSlide from './components/DrawerSlide';
 import About from './components/About';
 import Settings from './components/Settings';
 import MovieDetail from './components/MovieDetail';
-import TopRatedMovies from './components/TopRatedMovies';
 import { StackNavigator, DrawerNavigator, TabNavigator } from 'react-navigation';
 
 StatusBar.setHidden(true);

@@ -12,7 +12,7 @@ export default class About extends Component {
     render() {
         return (
             <WebView
-                source={{ uri: 'https://www.themoviedb.org/about/our-history' }}
+                source={{ uri: 'https://www.themoviedb.org/about' }}
             />
         );
     }
