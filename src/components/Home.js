@@ -21,12 +21,11 @@ export default class Home extends Component {
     }
 
     static navigationOptions = ({ navigation }) => {
-        const { params = {} } = navigation.state;
+        const { params = { title: 'Popular' } } = navigation.state;
 
         let header = (<Header navigation={navigation} title={params.title} />)
-        let headerBackTitle = 'Popular';
 
-        return { header, headerBackTitle };
+        return { header };
     }
 
     fetchData() {
@@ -52,9 +51,6 @@ export default class Home extends Component {
     }
 
     render() {
-        // var { params } = this.props.navigation.state
-        // if (params != undefined)
-        //     console.log('params: ', params.type)
         return (
             <View>
                 <FlatList

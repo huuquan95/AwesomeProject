@@ -13,6 +13,7 @@ import DrawerSlide from './components/DrawerSlide';
 import About from './components/About';
 import Settings from './components/Settings';
 import MovieDetail from './components/MovieDetail';
+import Reminder from './components/Reminder';
 import { StackNavigator, DrawerNavigator, TabNavigator } from 'react-navigation';
 
 StatusBar.setHidden(true);
@@ -28,6 +29,13 @@ const FavoritesStack = StackNavigator(
     {
         Favorites: { screen: Favorites },
         MovieDetail: { screen: MovieDetail }
+    }
+)
+
+const SettingsStack = StackNavigator(
+    {
+        Settings: { screen: Settings },
+        Reminder: { screen: Reminder }
     }
 )
 
@@ -56,8 +64,8 @@ const Tabs = TabNavigator(
                     />)
             }),
         },
-        Settings: {
-            screen: Settings,
+        SettingsStack: {
+            screen: SettingsStack,
             navigationOptions: ({ navigation }) => ({
                 tabBarLabel: 'Settings',
                 tabBarIcon: ({ tintColor }) => (

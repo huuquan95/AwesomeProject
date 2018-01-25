@@ -33,7 +33,7 @@ export default class Header extends Component {
                             source={require('../images/grid.png')}
                             style={{ width: 26, height: 26 }}
                         />
-                        : <View />}
+                        : <View style={{ width: 26 }} />}
 
                 </TouchableOpacity>
             </View>

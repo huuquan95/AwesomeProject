@@ -83,7 +83,7 @@ export default class DrawerSlide extends Component {
 
                 <TouchableOpacity
                     onPress={() => {
-                        this.props.navigation.navigate("EditProfile")
+                        this.props.navigation.navigate("Reminder")
                     }}
                     style={{
                         alignSelf: 'center', alignItems: 'center', justifyContent: 'center',

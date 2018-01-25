@@ -4,9 +4,11 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View, Image, FlatList, RefreshControl
+    View, Image, FlatList, RefreshControl, TouchableOpacity, Dimensions
 } from 'react-native';
 import ReminderItem from './ReminderItem';
+
+var { height, width } = Dimensions.get('window');
 
 export default class Reminder extends Component {
 
@@ -16,6 +18,37 @@ export default class Reminder extends Component {
             reminderMovies: [],
             refreshing: false,
         }
+    }
+
+    static navigationOptions = ({ navigation }) => {
+        let header = (
+            <View
+                style={{
+                    alignItems: 'center', flexDirection: 'row',
+                    justifyContent: 'space-between', backgroundColor: '#5564B1',
+                    height: 50, paddingLeft: 10, paddingRight: 10
+                }}
+            >
+
+                <TouchableOpacity
+                    style={{ flexDirection: 'row' }}
+                    onPress={() => { navigation.goBack() }}>
+                    <Image
+                        source={require('../images/left_arrow.png')}
+                        style={{ width: 24, height: 24 }}
+                    />
+                    <Text
+                        style={{ fontSize: 20, color: 'white' }}
+                    >Settings</Text>
+                </TouchableOpacity>
+
+                <Text
+                    style={{ fontSize: 20, color: 'white' }}
+                >Reminder</Text>
+                <View style={{ width: 80 }}></View>
+            </View>
+        );
+        return { header };
     }
 
     render() {
