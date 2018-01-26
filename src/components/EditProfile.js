@@ -5,7 +5,7 @@ import {
     StyleSheet,
     Text,
     View, Image,
-    TouchableOpacity, Dimensions, Alert
+    TouchableOpacity, Dimensions, Alert, TextInput
 } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import RadioButton from 'radio-button-react-native';
@@ -25,14 +25,16 @@ export default class EditProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: 0,
+            isMale: 0,
             isDateTimePickerVisible: false,
-            date: "11/26/1995"
+            date: "11/26/1995",
+            name: 'Quan (Quinto) H. Dinh',
+            email: 'quinto@enclave.vn',
         }
     }
 
-    handleOnPress(value) {
-        this.setState({ value: value })
+    handleOnPress(isMale) {
+        this.setState({ isMale: isMale })
     }
 
     _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
@@ -85,7 +87,10 @@ export default class EditProfile extends Component {
                                 }}
                             />
                         </TouchableOpacity>
-                        <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>Quan (Quinto) H. Dinh</Text>
+                        <TextInput
+                            style={{ fontWeight: 'bold', textAlign: 'center', marginTop: 10 }}
+                            onChangeText={(text) => this.setState({ name: text })}
+                            value={this.state.name} />
                     </View>
                     <TouchableOpacity
                         onPress={() => { this.props.navigation.navigate('Tabs') }}
@@ -115,12 +120,10 @@ export default class EditProfile extends Component {
                         source={require('../images/email.png')}
                         style={{ width: 24, height: 24 }}
                     />
-                    <Text style={{ marginLeft: 10 }}>quinto@enclave.vn</Text>
                 </View>
 
                 <View
                     style={{ flexDirection: 'row', alignItems: 'center', margin: 5 }}>
-
                     <Image
                         source={require('../images/gender.png')}
                         style={{ width: 24, height: 24 }}
@@ -131,7 +134,7 @@ export default class EditProfile extends Component {
                     >
 
                         <RadioButton
-                            currentValue={this.state.value}
+                            currentValue={this.state.isMale}
                             value={0}
                             onPress={this.handleOnPress.bind(this)}
                         >
@@ -139,7 +142,7 @@ export default class EditProfile extends Component {
                         </RadioButton>
 
                         <RadioButton
-                            currentValue={this.state.value}
+                            currentValue={this.state.isMale}
                             value={1}
                             onPress={this.handleOnPress.bind(this)}
                         >

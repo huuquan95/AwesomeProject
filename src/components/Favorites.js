@@ -40,7 +40,7 @@ export default class Favorites extends Component {
                 }}
 
                 data={['a', 'b']}
-                keyExtractor={(item, index) => item.id}
+                keyExtractor={(item, index) => index}
                 renderItem={({ item }) =>
                     // <DetailItem details={item} navigation={this.props.navigation} />
                     <DetailItem />

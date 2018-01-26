@@ -7,7 +7,17 @@ import {
     View, Image, TouchableHighlight, TouchableOpacity,
 } from 'react-native';
 
+const grid = require('../images/mode_grid.png');
+const detail = require('../images/mode_detail.png');
+
 export default class Header extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            display_mode: 'detail'
+        }
+    }
 
     render() {
         return (
@@ -28,14 +38,26 @@ export default class Header extends Component {
 
                 <Text style={{ fontSize: 20, color: 'white' }}>{this.props.title}</Text>
 
-                <TouchableOpacity>
-                    {this.props.isShowListIcon != false ?
+                {this.props.isShowListIcon != false ?
+                    <TouchableOpacity
+                        onPress={() => {
+                            let newDisplayMode = this.state.display_mode == 'detail' ? 'grid' : 'detail'
+                            this.props.navigation.state.params.changeDisplayMode(newDisplayMode);
+                            this.setState((previousState) => {
+                                return {
+                                    ...previousState,
+                                    display_mode: newDisplayMode,
+                                }
+                            })
+
+                        }}
+                    >
                         <Image
-                            source={require('../images/grid.png')}
+                            source={this.state.display_mode == 'detail' ? detail : grid}
                             style={{ width: 26, height: 26 }}
                         />
-                        : <View style={{ width: 26 }} />}
-                </TouchableOpacity>
+                    </TouchableOpacity>
+                    : <View style={{ width: 26 }} />}
             </View>
         );
     }

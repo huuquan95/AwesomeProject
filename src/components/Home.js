@@ -4,28 +4,55 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View, Image, FlatList, RefreshControl, TouchableOpacity
+    View, Image, FlatList, RefreshControl, TouchableOpacity, Dimensions
 } from 'react-native';
+import GridView from 'react-native-super-grid';
 import DetailItem from './DetailItem';
+import GridItem from './GridItem';
 import Header from './Header';
+
+var { height, width } = Dimensions.get('window');
 
 export default class Home extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            popularMovies: [],
+            movies: [],
             refreshing: false,
             pageLoading: 1,
+            display_mode: 'detail'
         }
     }
 
     static navigationOptions = ({ navigation }) => {
-        const { params = { title: 'Popular' } } = navigation.state;
 
+        const { params = { title: 'Popular' } } = navigation.state;
         let header = (<Header navigation={navigation} title={params.title} />)
 
         return { header };
+    }
+
+    componentWillMount() {
+        let { navigation } = this.props;
+        let { params } = navigation.state;
+
+        navigation.setParams({
+            title: (params != undefined) ? params.title : "Popular",
+            type: (params != undefined) ? params.type : "popular",
+            changeDisplayMode: this._changeDisplayMode
+        })
+
+        this.fetchData();
+    }
+
+    _changeDisplayMode = (display_mode = 'detail') => {
+        this.setState((previousState) => {
+            return {
+                ...previousState,
+                display_mode: display_mode
+            }
+        })
     }
 
     fetchData() {
@@ -40,36 +67,44 @@ export default class Home extends Component {
                         ...previousState,
                         refreshing: false,
                         pageLoading: 2,
-                        popularMovies: res.results
+                        movies: res.results
                     }
                 })
             })
     }
 
-    componentWillMount() {
-        this.fetchData();
-    }
-
     render() {
-        return (
-            <FlatList
-                refreshing={this.state.refreshing}
+        if (this.state.display_mode == 'detail')
+            return (
+                <FlatList
+                    refreshing={this.state.refreshing}
 
-                onRefresh={() => {
-                    this.setState((previousState) => {
-                        return {
-                            ...previousState, refreshing: true
-                        }
-                    })
-                    this.fetchData()
-                }}
+                    onRefresh={() => {
+                        this.setState((previousState) => {
+                            return {
+                                ...previousState, refreshing: true
+                            }
+                        })
+                        this.fetchData()
+                    }}
 
-                data={this.state.popularMovies}
-                keyExtractor={(item, index) => item.id}
-                renderItem={({ item }) =>
-                    <DetailItem details={item} navigation={this.props.navigation} />
-                }
-            />
-        );
+                    data={this.state.movies}
+                    keyExtractor={(item, index) => item.id}
+                    renderItem={({ item }) =>
+                        <DetailItem details={item} navigation={this.props.navigation} />
+                    }
+                />
+            );
+        else
+            return (
+                <GridView
+                    itemDimension={width / 2 - 5}
+                    items={this.state.movies}
+                    style={{ margin: 5 }}
+                    renderItem={item => (
+                        <GridItem details={item} navigation={this.props.navigation} />
+                    )}
+                />
+            );
     }
 }
