@@ -98,9 +98,9 @@ export default class Home extends Component {
         else
             return (
                 <GridView
-                    itemDimension={width / 2 - 5}
+                    itemDimension={width / 2 - 15}
                     items={this.state.movies}
-                    style={{ margin: 5 }}
+                    style={{ margin: Platform.OS == 'ios' ? 5 : 0 }}
                     renderItem={item => (
                         <GridItem details={item} navigation={this.props.navigation} />
                     )}
