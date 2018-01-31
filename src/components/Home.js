@@ -75,8 +75,8 @@ export class Home extends Component {
             return (
                 <GridView
                     itemDimension={width / 2 - 25}
-                    items={this.props.movies}
-                    style={{ margin: 5 }}
+                    items={this.state.movies}
+                    style={{ margin: Platform.OS == 'ios' ? 5 : 0 }}
                     renderItem={item => (
                         <GridItem details={item} navigation={this.props.navigation} />
                     )}
