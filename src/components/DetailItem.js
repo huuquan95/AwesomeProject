@@ -6,11 +6,15 @@ import {
     Text,
     View, Image, TouchableOpacity, Dimensions
 } from 'react-native';
+
+import { addFavoriteMovie } from '../actions';
+import { connect } from 'react-redux';
+
 const starChecked = require('../images/star_checked.png');
 const startUnchecked = require('../images/star_unchecked.png');
 var { height, width } = Dimensions.get('window');
 
-export default class DetailItem extends Component {
+export class DetailItem extends Component {
 
     constructor(props) {
         super(props);
@@ -39,7 +43,10 @@ export default class DetailItem extends Component {
                     </Text>
 
                     <TouchableOpacity
-                        onPress={() => this.setState({ checked: !this.state.checked })}
+                        onPress={() => {
+                            this.setState({ checked: !this.state.checked });
+                            this.props.addFavoriteMovie(details.id);
+                        }}
                     >
                         <Image
                             source={this.state.checked ? starChecked : startUnchecked}
@@ -86,6 +93,23 @@ export default class DetailItem extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        addFavoriteMovie: (movieId) => {
+            dispatch(addFavoriteMovie(movieId))
+        }
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DetailItem);
+
 
 const styles = StyleSheet.create({
     row1: {

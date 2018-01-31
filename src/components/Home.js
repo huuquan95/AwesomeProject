@@ -11,9 +11,12 @@ import DetailItem from './DetailItem';
 import GridItem from './GridItem';
 import Header from './Header';
 
+import { loadMovies } from '../actions';
+import { connect } from 'react-redux';
+
 var { height, width } = Dimensions.get('window');
 
-export default class Home extends Component {
+export class Home extends Component {
 
     constructor(props) {
         super(props);
@@ -34,16 +37,7 @@ export default class Home extends Component {
     }
 
     componentWillMount() {
-        let { navigation } = this.props;
-        let { params } = navigation.state;
-
-        navigation.setParams({
-            title: (params != undefined) ? params.title : "Popular",
-            type: (params != undefined) ? params.type : "popular",
-            changeDisplayMode: this._changeDisplayMode
-        })
-
-        this.fetchData();
+        this.props.loadMovies();
     }
 
     _changeDisplayMode = (display_mode = 'detail') => {
@@ -55,26 +49,8 @@ export default class Home extends Component {
         })
     }
 
-    fetchData() {
-        var { params = { type: 'popular' } } = this.props.navigation.state;
-        url = "https://api.themoviedb.org/3/movie/" + params.type + "?api_key=0267c13d8c7d1dcddb40001ba6372235";
-
-        fetch(url)
-            .then((response) => response.json())
-            .then((res) => {
-                this.setState((previousState) => {
-                    return {
-                        ...previousState,
-                        refreshing: false,
-                        pageLoading: 2,
-                        movies: res.results
-                    }
-                })
-            })
-    }
-
     render() {
-        if (this.state.display_mode == 'detail')
+        if (this.props.display_mode == 'detail')
             return (
                 <FlatList
                     refreshing={this.state.refreshing}
@@ -88,7 +64,7 @@ export default class Home extends Component {
                         this.fetchData()
                     }}
 
-                    data={this.state.movies}
+                    data={this.props.movies}
                     keyExtractor={(item, index) => item.id}
                     renderItem={({ item }) =>
                         <DetailItem details={item} navigation={this.props.navigation} />
@@ -98,8 +74,8 @@ export default class Home extends Component {
         else
             return (
                 <GridView
-                    itemDimension={width / 2 - 5}
-                    items={this.state.movies}
+                    itemDimension={width / 2 - 25}
+                    items={this.props.movies}
                     style={{ margin: 5 }}
                     renderItem={item => (
                         <GridItem details={item} navigation={this.props.navigation} />
@@ -108,3 +84,32 @@ export default class Home extends Component {
             );
     }
 }
+
+const mapStateToProps = (state) => {
+    // console.log('mapStateToProps ', state)
+    return {
+        movies: state.movies,
+        display_mode: state.display_mode,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        loadMovies: () => {
+
+            url = "https://api.themoviedb.org/3/movie/popular?api_key=0267c13d8c7d1dcddb40001ba6372235";
+
+            fetch(url)
+                .then((response) => response.json())
+                .then((res) => {
+                    dispatch(loadMovies(res.results));
+                })
+                .catch((err) => {
+                    console.log(err);
+                    dispatch(loadMovies([]))
+                })
+        }
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

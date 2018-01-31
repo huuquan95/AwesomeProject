@@ -16,6 +16,14 @@ import MovieDetail from './components/MovieDetail';
 import Reminder from './components/Reminder';
 import { StackNavigator, DrawerNavigator, TabNavigator } from 'react-navigation';
 
+//redux
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+
+import reducers from './reducers/index';
+
+let store = createStore(reducers);
+
 StatusBar.setHidden(true);
 
 const HomeStack = StackNavigator(
@@ -136,4 +144,14 @@ const Drawer = DrawerNavigator(
         contentComponent: props => <DrawerSlide {...props} />,
     }
 )
-export default Drawer;
+
+export default class App extends Component {
+    state = {}
+    render() {
+        return (
+            <Provider store={store}>
+                <Drawer />
+            </Provider>
+        );
+    }
+}

@@ -7,10 +7,14 @@ import {
     View, Image, TouchableHighlight, TouchableOpacity,
 } from 'react-native';
 
+import { changDisplayMode } from '../actions';
+import { connect } from 'react-redux';
+
 const grid = require('../images/mode_grid.png');
 const detail = require('../images/mode_detail.png');
 
-export default class Header extends Component {
+// export default class Header extends Component {
+export class Header extends Component {
 
     constructor(props) {
         super(props);
@@ -41,19 +45,19 @@ export default class Header extends Component {
                 {this.props.isShowListIcon != false ?
                     <TouchableOpacity
                         onPress={() => {
-                            let newDisplayMode = this.state.display_mode == 'detail' ? 'grid' : 'detail'
-                            this.props.navigation.state.params.changeDisplayMode(newDisplayMode);
-                            this.setState((previousState) => {
-                                return {
-                                    ...previousState,
-                                    display_mode: newDisplayMode,
-                                }
-                            })
-
+                            // let newDisplayMode = this.state.display_mode == 'detail' ? 'grid' : 'detail'
+                            // this.props.navigation.state.params.changeDisplayMode(newDisplayMode);
+                            // this.setState((previousState) => {
+                            //     return {
+                            //         ...previousState,
+                            //         display_mode: newDisplayMode,
+                            //     }
+                            // })
+                            this.props.changDisplayMode();
                         }}
                     >
                         <Image
-                            source={this.state.display_mode == 'detail' ? detail : grid}
+                            source={this.props.display_mode == 'detail' ? detail : grid}
                             style={{ width: 26, height: 26 }}
                         />
                     </TouchableOpacity>
@@ -62,3 +66,20 @@ export default class Header extends Component {
         );
     }
 }
+
+
+const mapStateToProps = (state) => {
+    return {
+        display_mode: state.display_mode,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        changDisplayMode: () => {
+            dispatch(changDisplayMode())
+        }
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
