@@ -5,7 +5,7 @@ import {
     StyleSheet,
     Text,
     View, Image,
-    TouchableOpacity, Dimensions, Alert, TextInput
+    TouchableOpacity, Dimensions, Alert, TextInput, AsyncStorage
 } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import RadioButton from 'radio-button-react-native';
@@ -31,6 +31,25 @@ export default class EditProfile extends Component {
             name: 'Quan (Quinto) H. Dinh',
             email: 'quinto@enclave.vn',
         }
+    }
+
+  
+
+    getInfo = async () => {
+        try {
+            let name = await AsyncStorage.getItem('name');
+            this.setState({ name: name });
+        } catch (err) { console.log('Err GetInfo: ', err) }
+    }
+
+    saveInfo = async () => {
+        try {
+            await AsyncStorage.setItem('name', this.state.name)
+        } catch (err) { console.log('Err SaveInfo: ', err) }
+    }
+
+    componentWillMount() {
+        this.getInfo()
     }
 
     handleOnPress(isMale) {
@@ -76,11 +95,37 @@ export default class EditProfile extends Component {
                         <TouchableOpacity
                             onPress={() => {
                                 ImagePicker.launchImageLibrary(options, (response) => {
+                                    // });
+                                    // ImagePicker.showImagePicker(options, (response) => {
+                                    console.log('Response = ', response);
+
+                                    if (response.didCancel) {
+                                        console.log('User cancelled image picker');
+                                    }
+                                    else if (response.error) {
+                                        console.log('ImagePicker Error: ', response.error);
+                                    }
+                                    else if (response.customButton) {
+                                        console.log('User tapped custom button: ', response.customButton);
+                                    }
+                                    else {
+                                        let source = { uri: response.uri };
+                                        console.log('uri: ', source)
+                                        // You can also display the image using data:
+                                        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+                                        this.setState({
+                                            avatarSource: source
+                                        });
+                                    }
                                 });
                             }}
                         >
                             <Image
-                                source={require('../images/default_avatar.png')}
+                                source={
+                                    this.state.avatarSource == null ?
+                                        require(`../images/default_avatar.png`)
+                                        : this.state.avatarSource}
                                 style={{
                                     width: width / 2, height: width / 2,
                                     borderRadius: width / 4
@@ -93,7 +138,10 @@ export default class EditProfile extends Component {
                             value={this.state.name} />
                     </View>
                     <TouchableOpacity
-                        onPress={() => { this.props.navigation.navigate('Tabs') }}
+                        onPress={() => {
+                            this.saveInfo()
+                            this.props.navigation.navigate('Tabs')
+                        }}
                         style={{
                             alignItems: 'center', justifyContent: 'center',
                             backgroundColor: "#057AFF",

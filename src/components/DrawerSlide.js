@@ -4,12 +4,38 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View, Image, Dimensions, ScrollView, TouchableOpacity
+    View, Image, Dimensions, ScrollView, TouchableOpacity, AsyncStorage
 } from 'react-native';
 
 var { height, width } = Dimensions.get('window');
 
 export default class DrawerSlide extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            isMale: true,
+            date: "01/01/2001",
+            name: 'Your name',
+            email: 'Your email',
+        }
+    }
+
+    getInfo = async () => {
+        try {
+            let name = await AsyncStorage.getItem('name');
+            this.setState({ name: name });
+        } catch (err) { console.log('Err Name: ', err) }
+    }
+    
+    componentDidUpdate() {
+        this.getInfo()
+    }
+
+    componentWillMount() {
+        this.getInfo()
+    }
+
     render() {
         return (
             <ScrollView
@@ -27,7 +53,7 @@ export default class DrawerSlide extends Component {
                             }}
                         />
                     </TouchableOpacity>
-                    <Text style={{ marginTop: 10, fontWeight: 'bold' }}>Quan (Quinto) H. Dinh</Text>
+                    <Text style={{ marginTop: 10, fontWeight: 'bold' }}>{this.state.name}</Text>
                 </View>
 
                 <View
@@ -36,7 +62,7 @@ export default class DrawerSlide extends Component {
                         source={require('../images/birthday.png')}
                         style={{ width: 24, height: 24 }}
                     />
-                    <Text style={{ marginLeft: 10 }}>26/11/1995</Text>
+                    <Text style={{ marginLeft: 10 }}>{this.state.date}</Text>
                 </View>
 
                 <View
@@ -45,7 +71,7 @@ export default class DrawerSlide extends Component {
                         source={require('../images/email.png')}
                         style={{ width: 24, height: 24 }}
                     />
-                    <Text style={{ marginLeft: 10 }}>quinto@enclave.vn</Text>
+                    <Text style={{ marginLeft: 10 }}>{this.state.email}</Text>
                 </View>
 
                 <View
@@ -54,7 +80,7 @@ export default class DrawerSlide extends Component {
                         source={require('../images/gender.png')}
                         style={{ width: 24, height: 24 }}
                     />
-                    <Text style={{ marginLeft: 10 }}>Male</Text>
+                    <Text style={{ marginLeft: 10 }}>{this.state.isMale == true ? 'Male' : 'Female'}</Text>
                 </View>
 
                 <TouchableOpacity

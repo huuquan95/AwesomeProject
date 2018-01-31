@@ -58,10 +58,27 @@ const Tabs = TabNavigator(
             navigationOptions: ({ navigation }) => ({
                 tabBarLabel: 'Favorites',
                 tabBarIcon: ({ tintColor }) => (
-                    <Image
-                        source={require('./images/heart.png')}
-                        style={{ height: 24, width: 24, tintColor: tintColor }}
-                    />)
+
+                    <View style={{ justifyContent: "center", alignItems: "center" }}>
+                        <Image
+                            source={require('./images/heart.png')}
+                            style={{ height: 26, width: 26, tintColor: tintColor }}
+                        />
+                        <View style={{
+                            position: 'absolute',
+                            height: 20,
+                            width: 20,
+                            borderRadius: 10,
+                            backgroundColor: 'red',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            left: 20, top: -15
+                        }}>
+                            <Text style={{ fontSize: 10, color: "white" }}>18</Text>
+                        </View>
+                    </View>
+
+                )
             }),
         },
         SettingsStack: {
@@ -94,7 +111,13 @@ const Tabs = TabNavigator(
             activeTintColor: 'white',
             activeBackgroundColor: '#5564B1',
             inactiveBackgroundColor: '#5564B1',
-            upperCaseLabel: false
+            upperCaseLabel: false,
+            iconStyle: {
+                alignItems: "center",
+                justifyContent: "flex-end",
+                height: 30,
+                width: 40,
+            }
         },
         swipeEnabled: true,
     }
