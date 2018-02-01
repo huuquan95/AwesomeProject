@@ -20,6 +20,7 @@ export class Home extends Component {
 
     constructor(props) {
         super(props);
+        this.props.loadMovies();
         this.state = {
             movies: [],
             refreshing: false,
@@ -34,10 +35,6 @@ export class Home extends Component {
         let header = (<Header navigation={navigation} title={params.title} />)
 
         return { header };
-    }
-
-    componentWillMount() {
-        this.props.loadMovies();
     }
 
     _changeDisplayMode = (display_mode = 'detail') => {
@@ -61,21 +58,19 @@ export class Home extends Component {
                                 ...previousState, refreshing: true
                             }
                         })
-                        this.fetchData()
+                        //this.fetchData()
                     }}
 
                     data={this.props.movies}
                     keyExtractor={(item, index) => item.id}
-                    renderItem={({ item }) =>
-                        <DetailItem details={item} navigation={this.props.navigation} />
-                    }
+                    renderItem={({ item }) => <DetailItem details={item} navigation={this.props.navigation} />}
                 />
             );
         else
             return (
                 <GridView
                     itemDimension={width / 2 - 25}
-                    items={this.state.movies}
+                    items={this.props.movies}
                     style={{ margin: Platform.OS == 'ios' ? 5 : 0 }}
                     renderItem={item => (
                         <GridItem details={item} navigation={this.props.navigation} />
@@ -85,8 +80,8 @@ export class Home extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    // console.log('mapStateToProps ', state)
+const mapStateToProps = (state) => {-
+    console.log('Home mapStateToProps favoriteMovies ', state.favoriteMovies)
     return {
         movies: state.movies,
         display_mode: state.display_mode,

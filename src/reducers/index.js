@@ -3,14 +3,14 @@ import { combineReducers } from 'redux';
 import {
     LOAD_MOVIES,
     CHANGE_DISPLAY_MODE,
-    ADD_FAVORITE_MOVIE,
+    TOGGLE_FAVORITE_MOVIE,
 } from '../actions/actionTypes';
 
 const defaultState = {
     movies: [],
     display_mode: 'detail',
-    favoriteMovies: []
-
+    favoriteMovies: [],
+    movieType: 'popular'
 }
 
 const reducers = (state = defaultState, action) => {
@@ -28,17 +28,24 @@ const reducers = (state = defaultState, action) => {
                 display_mode: state.display_mode == 'detail' ? 'grid' : 'detail'
             }
 
-        case ADD_FAVORITE_MOVIE:
-            console.log('FavoriteMovies: ', state.favoriteMovies)
-            if (state.favoriteMovies.indexOf(action.movieId) != -1)
-                console.log('Have it before', action.movieId);
-            return {
-                ...state,
-                favoriteMovies: state.favoriteMovies.concat(action.movieId)
+        case TOGGLE_FAVORITE_MOVIE:
+            var index = state.favoriteMovies.indexOf(action.movieId)
+            if (index != -1) {
+                state.favoriteMovies.splice(index, 1);
+                return {
+                    ...state,
+                    favoriteMovies: state.favoriteMovies
+                }
+            }
+            else {
+                return {
+                    ...state,
+                    favoriteMovies: state.favoriteMovies.concat(action.movieId)
+                }
             }
 
         default:
-            return state; //state does not change
+            return state;
     }
 }
 

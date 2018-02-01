@@ -8,9 +8,12 @@ import {
 } from 'react-native';
 import Header from './Header';
 
+import { loadMovies } from '../actions';
+import { connect } from 'react-redux';
+
 var { height, width } = Dimensions.get('window');
 
-export default class Settings extends Component {
+export class Settings extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -37,8 +40,8 @@ export default class Settings extends Component {
 
                     <TouchableOpacity
                         onPress={() => {
-                            this.props.navigation.set
-                            this.props.navigation.navigate('Home', { type: 'popular', title: 'Popular' })
+                            this.props.loadMovies('popular');
+                            this.props.navigation.navigate('Home', { type: 'popular', title: 'Popular' });
                         }}
                     >
                         <Text style={{ fontSize: 20, padding: 10 }} >
@@ -47,7 +50,10 @@ export default class Settings extends Component {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={() => { this.props.navigation.navigate('Home', { type: 'top_rated', title: 'Top Rated' }) }}
+                        onPress={() => {
+                            this.props.loadMovies('top_rated');
+                            this.props.navigation.navigate('Home', { type: 'top_rated', title: 'Top Rated' });
+                        }}
                         style={{
                             borderBottomWidth: 0.5, borderBottomColor: 'cyan',
                             marginLeft: 10, marginRight: 10, paddingTop: 10, paddingBottom: 10,
@@ -59,7 +65,10 @@ export default class Settings extends Component {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={() => { this.props.navigation.navigate('Home', { type: 'upcoming', title: 'Up Coming' }) }}
+                        onPress={() => {
+                            this.props.loadMovies('upcoming');
+                            this.props.navigation.navigate('Home', { type: 'upcoming', title: 'Up Coming' });
+                        }}
                     >
                         <Text style={{ fontSize: 20, padding: 10 }} >
                             Upcoming Movies
@@ -67,7 +76,10 @@ export default class Settings extends Component {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={() => { this.props.navigation.navigate('Home', { type: 'now_playing', title: 'Now Playing' }) }}
+                        onPress={() => {
+                            this.props.loadMovies('now_playing');
+                            this.props.navigation.navigate('Home', { type: 'now_playing', title: 'Now Playing' });
+                        }}
                         style={{
                             borderBottomWidth: 0.5, borderBottomColor: 'cyan',
                             marginLeft: 10, marginRight: 10, paddingTop: 10, paddingBottom: 10,
@@ -98,7 +110,6 @@ export default class Settings extends Component {
                         step={0.1}
                         value={this.state.rate}
                         onValueChange={val => this.setState({ rate: val })}
-                    // onSlidingComplete={()=>{alert('OK')}}
                     />
 
                     <View style={{
@@ -106,14 +117,6 @@ export default class Settings extends Component {
                         flexDirection: 'row', justifyContent: 'space-between',
                     }}>
                         <Text style={{ fontSize: 20 }} >From Release Year:</Text>
-                        {/* <Text style={{ fontSize: 20 }} >1970</Text> */}
-                        <Picker
-                            style={{ width: 80 }}
-                            selectedValue={'abc'}
-                            onValueChange={(itemValue, itemIndex) => this.setState({ language: itemValue })}>
-                            <Picker.Item label="Java" value="java" />
-                            <Picker.Item label="JavaScript" value="js" />
-                        </Picker>
                     </View>
                     <Text
                         style={{ fontSize: 20, fontWeight: 'bold', padding: 10 }}>
@@ -147,6 +150,30 @@ export default class Settings extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {}
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        loadMovies: (moviesType) => {
+
+            url = "https://api.themoviedb.org/3/movie/" + moviesType + "?api_key=0267c13d8c7d1dcddb40001ba6372235";
+
+            fetch(url)
+                .then((response) => response.json())
+                .then((res) => {
+                    dispatch(loadMovies(res.results, moviesType));
+                })
+                .catch((err) => {
+                    console.log(err);
+                    dispatch(loadMovies())
+                })
+        }
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);
 
 const styles = StyleSheet.create({
     item: {

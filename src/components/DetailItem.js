@@ -7,7 +7,7 @@ import {
     View, Image, TouchableOpacity, Dimensions
 } from 'react-native';
 
-import { addFavoriteMovie } from '../actions';
+import { toggleFavoriteMovie } from '../actions';
 import { connect } from 'react-redux';
 
 const starChecked = require('../images/star_checked.png');
@@ -16,16 +16,17 @@ var { height, width } = Dimensions.get('window');
 
 export class DetailItem extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            checked: false
-        }
-    }
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         checked: props.isFavorite
+    //     }
+    // }
 
     render() {
         var {
             details = {
+            id: 123456,
             title: '...',
             poster_path: '5CGjlz2vyBhW5xHW4eNOZIdgzYq.jpg',
             release_date: '...',
@@ -44,12 +45,14 @@ export class DetailItem extends Component {
 
                     <TouchableOpacity
                         onPress={() => {
-                            this.setState({ checked: !this.state.checked });
-                            this.props.addFavoriteMovie(details.id);
+                            //this.setState({ checked: !this.state.checked });
+                            console.log('DetailItem: ', this.props.favoriteMovies.indexOf(details.id) != -1 ? true : false)
+                            this.props.toggleFavoriteMovie(details.id);
                         }}
                     >
                         <Image
-                            source={this.state.checked ? starChecked : startUnchecked}
+                            // source={this.props.favoriteMovies.indexOf(details.id) != -1 ? starChecked : startUnchecked}
+                            source={this.props.isFavorite ? starChecked : startUnchecked}
                             style={styles.star}
                         />
                     </TouchableOpacity>
@@ -94,16 +97,26 @@ export class DetailItem extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, props) => {
+    // console.log('DetailItem', state.favoriteMovies)
+    var isFavorite = false;
+    try {
+        isFavorite = state.favoriteMovies.indexOf(props.details.id) != -1 ? true : false;
+    } catch (err) {
+        // console.log('Error: ', err)
+    }
+    // console.log('isFavorite', isFavorite)
     return {
-
+        // isFavorite: state.favoriteMovies.indexOf(props.details.id),
+        favoriteMovies: state.favoriteMovies,
+        isFavorite: isFavorite
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        addFavoriteMovie: (movieId) => {
-            dispatch(addFavoriteMovie(movieId))
+        toggleFavoriteMovie: (movieId) => {
+            dispatch(toggleFavoriteMovie(movieId))
         }
     };
 }
