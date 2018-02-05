@@ -8,17 +8,19 @@ import {
     FlatList, Alert
 } from 'react-native';
 
+import { toggleFavoriteMovie } from '../actions';
+import { connect } from 'react-redux';
+
 const starChecked = require('../images/star_checked.png');
-const startUnchecked = require('../images/star_unchecked.png');
+const starUnchecked = require('../images/star_unchecked.png');
 var { height, width } = Dimensions.get('window');
 
-export default class MovieDatail extends Component {
+export class MovieDatail extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            actors: [],
-            checked: false
+            actors: []
         }
     }
 
@@ -78,22 +80,24 @@ export default class MovieDatail extends Component {
                                 marginTop: 10, marginLeft: 10, marginRight: 20, marginBottom: 20
                             }}
                             onPress={() => {
-                                if (this.state.checked == true)
+                                if (this.props.isFavorite == true) {
                                     Alert.alert(
                                         'Alert',
                                         'Are you sure you want to unfavorite this item?',
                                         [{ text: 'Cancel' },
                                         {
                                             text: 'OK',
-                                            onPress: () => { this.setState({ checked: !this.state.checked }) }
+                                            onPress: () => { this.props.toggleFavoriteMovie() }
                                         }]
                                     )
-                                else
-                                    this.setState({ checked: !this.state.checked });
+                                }
+                                else {
+                                    this.props.toggleFavoriteMovie()
+                                }
                             }}
                         >
                             <Image
-                                source={this.state.checked ? starChecked : startUnchecked}
+                                source={this.props.isFavorite ? starChecked : starUnchecked}
                                 style={styles.star}
                             />
                         </TouchableOpacity>
@@ -173,6 +177,25 @@ export default class MovieDatail extends Component {
     }
 }
 
+const mapStateToProps = (state, props) => {
+
+    return {
+        isFavorite: state.favoriteMovies
+            .map(movie => { return movie.id })
+            .indexOf(props.navigation.state.params.details.id) != -1 ? true : false,
+        favoriteMovies: state.favoriteMovies
+    }
+}
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        toggleFavoriteMovie: () => {
+            dispatch(toggleFavoriteMovie(props.navigation.state.params.details))
+        }
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MovieDatail);
 
 const styles = StyleSheet.create({
     row1: {

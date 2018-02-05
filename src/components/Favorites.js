@@ -29,38 +29,20 @@ export class Favorites extends Component {
     }
 
     render() {
-
         return (
             <FlatList
-                refreshing={this.state.refreshing}
-
-                onRefresh={() => {
-                    this.setState((previousState) => {
-                        return {
-                            ...previousState, refreshing: true
-                        }
-                    })
-                }}
-
                 data={this.props.favoriteMovies}
                 keyExtractor={(item, index) => index}
-                renderItem={({ item }) =>
-                // <DetailItem details={item} navigation={this.props.navigation} />
-                {
-                    console.log('item', item)
-                    return (<DetailItem />)
-                }
-                }
+                renderItem={({ item }) => {
+                    return (<DetailItem details={item} />)
+                }}
             />
         );
     }
 }
 
 const mapStateToProps = (state) => {
-    //console.log('favorite ', state.favoriteMovies)
-    // state.favoriteMovies.forEach(id => {
-    //     console.log('id ', id)
-    // });
+    console.log('favorite', state.favoriteMovies)
     return {
         favoriteMovies: state.favoriteMovies
     };
@@ -68,7 +50,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-
     };
 }
 

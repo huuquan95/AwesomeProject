@@ -80,8 +80,8 @@ export class Home extends Component {
     }
 }
 
-const mapStateToProps = (state) => {-
-    console.log('Home mapStateToProps favoriteMovies ', state.favoriteMovies)
+const mapStateToProps = (state) => {
+    // console.log('Home favoriteMovies ', state.favoriteMovies)
     return {
         movies: state.movies,
         display_mode: state.display_mode,

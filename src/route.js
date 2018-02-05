@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import Home from './components/Home';
 import Favorites from './components/Favorites';
+import FavoriteIcon from './components/FavoriteIcon';
 import Header from './components/Header';
 import EditProfile from './components/EditProfile';
 import DrawerSlide from './components/DrawerSlide';
@@ -66,26 +67,7 @@ const Tabs = TabNavigator(
             navigationOptions: ({ navigation }) => ({
                 tabBarLabel: 'Favorites',
                 tabBarIcon: ({ tintColor }) => (
-
-                    <View style={{ justifyContent: "center", alignItems: "center" }}>
-                        <Image
-                            source={require('./images/heart.png')}
-                            style={{ height: 26, width: 26, tintColor: tintColor }}
-                        />
-                        <View style={{
-                            position: 'absolute',
-                            height: 20,
-                            width: 20,
-                            borderRadius: 10,
-                            backgroundColor: 'red',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            left: 20, top: -15
-                        }}>
-                            <Text style={{ fontSize: 10, color: "white" }}>18</Text>
-                        </View>
-                    </View>
-
+                    <FavoriteIcon tintColor={tintColor} />
                 )
             }),
         },
@@ -130,6 +112,7 @@ const Tabs = TabNavigator(
         swipeEnabled: true,
     }
 )
+
 
 const Drawer = DrawerNavigator(
     {

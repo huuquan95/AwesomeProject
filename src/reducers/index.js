@@ -4,16 +4,20 @@ import {
     LOAD_MOVIES,
     CHANGE_DISPLAY_MODE,
     TOGGLE_FAVORITE_MOVIE,
+    ADD_REMINDER_MOVIES
 } from '../actions/actionTypes';
 
+import { AsyncStorage } from 'react-native';
 const defaultState = {
     movies: [],
     display_mode: 'detail',
     favoriteMovies: [],
+    reminderMovies: [],
     movieType: 'popular'
 }
 
 const reducers = (state = defaultState, action) => {
+
     switch (action.type) {
 
         case LOAD_MOVIES:
@@ -29,22 +33,32 @@ const reducers = (state = defaultState, action) => {
             }
 
         case TOGGLE_FAVORITE_MOVIE:
-            var index = state.favoriteMovies.indexOf(action.movieId)
-            if (index != -1) {
-                state.favoriteMovies.splice(index, 1);
+            try {
+                AsyncStorage.setItem('favoriteMovies', JSON.stringify(state.favoriteMovies));
+            } catch (err) {
+                console.log(err)
+            }
+            if (state.favoriteMovies.map(movie => { return movie.id }).indexOf(action.movie.id) != -1) {
+
                 return {
                     ...state,
-                    favoriteMovies: state.favoriteMovies
+                    favoriteMovies: state.favoriteMovies.filter(movie => (movie.id != action.movie.id))
                 }
             }
             else {
                 return {
                     ...state,
-                    favoriteMovies: state.favoriteMovies.concat(action.movieId)
+                    favoriteMovies: state.favoriteMovies.concat(action.movie)
                 }
             }
 
+        case ADD_REMINDER_MOVIES:
+            return {
+                ...state
+            }
+            
         default:
+            console.log('count')
             return state;
     }
 }

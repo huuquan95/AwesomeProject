@@ -1,11 +1,11 @@
 import {
     LOAD_MOVIES,
     CHANGE_DISPLAY_MODE,
-    TOGGLE_FAVORITE_MOVIE
+    TOGGLE_FAVORITE_MOVIE,
+    ADD_REMINDER_MOVIES
 } from './actionTypes';
 
 export const loadMovies = (movies = [], movieType = 'popular') => {
-    // console.log("Actions LoadMovies: ", movies)
     return {
         type: LOAD_MOVIES,
         movies: movies,
@@ -14,16 +14,21 @@ export const loadMovies = (movies = [], movieType = 'popular') => {
 }
 
 export const changDisplayMode = () => {
-    // console.log("Actions ChangeDisplayMode: ")
     return {
         type: CHANGE_DISPLAY_MODE
     }
 }
 
-export const toggleFavoriteMovie = (movieId) => {
-    console.log("Actions toggleFavoriteMovie: ", movieId)
+export const toggleFavoriteMovie = (movie) => {
     return {
         type: TOGGLE_FAVORITE_MOVIE,
-        movieId: movieId
+        movie: movie
+    }
+}
+
+export const addReminderMovies = (movie) => {
+    return {
+        type: ADD_REMINDER_MOVIES,
+        movie: movie
     }
 }

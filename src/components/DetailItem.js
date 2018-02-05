@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import {
     Platform,
     StyleSheet,
-    Text,
+    Text, Alert,
     View, Image, TouchableOpacity, Dimensions
 } from 'react-native';
 
@@ -11,17 +11,10 @@ import { toggleFavoriteMovie } from '../actions';
 import { connect } from 'react-redux';
 
 const starChecked = require('../images/star_checked.png');
-const startUnchecked = require('../images/star_unchecked.png');
+const starUnchecked = require('../images/star_unchecked.png');
 var { height, width } = Dimensions.get('window');
 
 export class DetailItem extends Component {
-
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //         checked: props.isFavorite
-    //     }
-    // }
 
     render() {
         var {
@@ -45,14 +38,24 @@ export class DetailItem extends Component {
 
                     <TouchableOpacity
                         onPress={() => {
-                            //this.setState({ checked: !this.state.checked });
-                            console.log('DetailItem: ', this.props.favoriteMovies.indexOf(details.id) != -1 ? true : false)
-                            this.props.toggleFavoriteMovie(details.id);
+                            if (this.props.isFavorite == true) {
+                                Alert.alert(
+                                    'Alert',
+                                    'Are you sure you want to unfavorite this item?',
+                                    [{ text: 'Cancel' },
+                                    {
+                                        text: 'OK',
+                                        onPress: () => { this.props.toggleFavoriteMovie() }
+                                    }]
+                                )
+                            }
+                            else {
+                                this.props.toggleFavoriteMovie()
+                            }
                         }}
                     >
                         <Image
-                            // source={this.props.favoriteMovies.indexOf(details.id) != -1 ? starChecked : startUnchecked}
-                            source={this.props.isFavorite ? starChecked : startUnchecked}
+                            source={this.props.isFavorite ? starChecked : starUnchecked}
                             style={styles.star}
                         />
                     </TouchableOpacity>
@@ -98,31 +101,25 @@ export class DetailItem extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-    // console.log('DetailItem', state.favoriteMovies)
-    var isFavorite = false;
-    try {
-        isFavorite = state.favoriteMovies.indexOf(props.details.id) != -1 ? true : false;
-    } catch (err) {
-        // console.log('Error: ', err)
-    }
-    // console.log('isFavorite', isFavorite)
+
     return {
-        // isFavorite: state.favoriteMovies.indexOf(props.details.id),
-        favoriteMovies: state.favoriteMovies,
-        isFavorite: isFavorite
+        isFavorite: state.favoriteMovies
+            .map(movie => { return movie.id })
+            .indexOf(props.details.id) != -1 ? true : false,
+        favoriteMovies: state.favoriteMovies
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, props) => {
+
     return {
-        toggleFavoriteMovie: (movieId) => {
-            dispatch(toggleFavoriteMovie(movieId))
+        toggleFavoriteMovie: () => {
+            dispatch(toggleFavoriteMovie(props.details))
         }
     };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetailItem);
-
 
 const styles = StyleSheet.create({
     row1: {
@@ -131,8 +128,7 @@ const styles = StyleSheet.create({
     },
     directionRow: {
         flexDirection: 'row'
-    }
-    ,
+    },
     title: {
         fontSize: 20, fontWeight: 'bold', color: '#000000',
         width: width - 48
