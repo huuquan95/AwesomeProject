@@ -13,14 +13,6 @@ import { connect } from 'react-redux';
 
 export class Favorites extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            refreshing: false,
-            movies: []
-        }
-    }
-
     static navigationOptions = ({ navigation }) => {
 
         let header = (<Header navigation={navigation} title={'Favorites'} isShowListIcon={false} />)
@@ -33,16 +25,13 @@ export class Favorites extends Component {
             <FlatList
                 data={this.props.favoriteMovies}
                 keyExtractor={(item, index) => index}
-                renderItem={({ item }) => {
-                    return (<DetailItem details={item} />)
-                }}
+                renderItem={({ item }) => <DetailItem details={item} navigation={this.props.navigation} />}
             />
         );
     }
 }
 
 const mapStateToProps = (state) => {
-    console.log('favorite', state.favoriteMovies)
     return {
         favoriteMovies: state.favoriteMovies
     };

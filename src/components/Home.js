@@ -81,7 +81,7 @@ export class Home extends Component {
 }
 
 const mapStateToProps = (state) => {
-    // console.log('Home favoriteMovies ', state.favoriteMovies)
+    console.log('Reminder: ', state.reminderMovies)
     return {
         movies: state.movies,
         display_mode: state.display_mode,

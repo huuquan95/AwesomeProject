@@ -8,7 +8,7 @@ import {
     FlatList, Alert
 } from 'react-native';
 
-import { toggleFavoriteMovie } from '../actions';
+import { toggleFavoriteMovie, addReminderMovies } from '../actions';
 import { connect } from 'react-redux';
 
 const starChecked = require('../images/star_checked.png');
@@ -117,6 +117,8 @@ export class MovieDatail extends Component {
                             />
 
                             <TouchableOpacity
+                                onPress={() => { this.props.addReminderMovies() }}
+
                                 style={{
                                     width: 120, paddingTop: 5, paddingBottom: 5, marginTop: 15,
                                     backgroundColor: '#415FFF', borderRadius: 10,
@@ -178,7 +180,6 @@ export class MovieDatail extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-
     return {
         isFavorite: state.favoriteMovies
             .map(movie => { return movie.id })
@@ -191,12 +192,16 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         toggleFavoriteMovie: () => {
             dispatch(toggleFavoriteMovie(props.navigation.state.params.details))
+        },
+        addReminderMovies: () => {
+            dispatch(addReminderMovies(props.navigation.state.params.details))
         }
     };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MovieDatail);
 
+//style
 const styles = StyleSheet.create({
     row1: {
         flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5,

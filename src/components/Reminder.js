@@ -7,10 +7,11 @@ import {
     View, Image, FlatList, RefreshControl, TouchableOpacity, Dimensions
 } from 'react-native';
 import ReminderItem from './ReminderItem';
+import { connect } from 'react-redux';
 
 var { height, width } = Dimensions.get('window');
 
-export default class Reminder extends Component {
+export class Reminder extends Component {
 
     constructor(props) {
         super(props);
@@ -54,14 +55,22 @@ export default class Reminder extends Component {
     render() {
         return (
             <FlatList
-                // refreshing={this.state.refreshing}
-                // onRefresh={() => {
-                // }}
-                // data={this.state.reminderMovies}
-                data={['a', 'b']}
+                data={this.props.reminderMovies}
                 keyExtractor={(item, index) => index}
-                renderItem={({ item }) => <ReminderItem />}
+                renderItem={({ item }) => <ReminderItem details={item} />}
             />
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        reminderMovies: state.reminderMovies
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Reminder);

@@ -33,8 +33,6 @@ export default class EditProfile extends Component {
         }
     }
 
-  
-
     getInfo = async () => {
         try {
             let name = await AsyncStorage.getItem('name');
@@ -168,6 +166,7 @@ export default class EditProfile extends Component {
                         source={require('../images/email.png')}
                         style={{ width: 24, height: 24 }}
                     />
+                    <Text style={{ marginLeft: 10 }}>{this.state.email}</Text>
                 </View>
 
                 <View

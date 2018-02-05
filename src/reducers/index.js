@@ -4,7 +4,8 @@ import {
     LOAD_MOVIES,
     CHANGE_DISPLAY_MODE,
     TOGGLE_FAVORITE_MOVIE,
-    ADD_REMINDER_MOVIES
+    ADD_REMINDER_MOVIES,
+    DELETE_REMINDER_MOVIES
 } from '../actions/actionTypes';
 
 import { AsyncStorage } from 'react-native';
@@ -33,11 +34,6 @@ const reducers = (state = defaultState, action) => {
             }
 
         case TOGGLE_FAVORITE_MOVIE:
-            try {
-                AsyncStorage.setItem('favoriteMovies', JSON.stringify(state.favoriteMovies));
-            } catch (err) {
-                console.log(err)
-            }
             if (state.favoriteMovies.map(movie => { return movie.id }).indexOf(action.movie.id) != -1) {
 
                 return {
@@ -53,10 +49,20 @@ const reducers = (state = defaultState, action) => {
             }
 
         case ADD_REMINDER_MOVIES:
+            if (state.reminderMovies.map(movie => { return movie.id }).indexOf(action.movie.id) != -1)
+                return state;
             return {
-                ...state
+                ...state,
+                reminderMovies: state.reminderMovies.concat(action.movie)
             }
-            
+
+        case DELETE_REMINDER_MOVIES:
+            if (state.reminderMovies.map(movie => { return movie.id }).indexOf(action.movie.id) != -1)
+                return {
+                    ...state,
+                    reminderMovies: state.reminderMovies.filter(movie => (movie.id != action.movie.id))
+                }
+
         default:
             console.log('count')
             return state;

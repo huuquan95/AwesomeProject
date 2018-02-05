@@ -7,10 +7,12 @@ import {
     View, Image, TouchableOpacity, Dimensions, Alert
 } from 'react-native';
 import Swipeout from 'react-native-swipeout';
+import { connect } from 'react-redux';
+import { deleteReminderMovies } from '../actions/index'
 
 var { height, width } = Dimensions.get('window');
 
-export default class ReminderItem extends Component {
+export class ReminderItem extends Component {
 
     render() {
         const swipeoutConfigs = {
@@ -33,7 +35,8 @@ export default class ReminderItem extends Component {
                             {
                                 text: 'OK',
                                 onPress: () => {
-                                    alert('Deleted successful')
+                                    this.props.deleteReminderMovies()
+                                    // alert('Deleted successful')
                                 }
                             }]
                         )
@@ -43,26 +46,42 @@ export default class ReminderItem extends Component {
                 }
             ]
         }
+        var { details } = this.props;
         return (
             <Swipeout {...swipeoutConfigs}>
                 <View
                     style={styles.item}
                 >
                     <Image
-                        source={require('../images/default_avatar.png')}
+                        source={{ uri: 'https://image.tmdb.org/t/p/w185/' + details.poster_path }}
                         style={styles.image}
                     ></Image>
                     <View
                         style={styles.rightBlock}
                     >
-                        <Text style={styles.normalText}>The Dark Tower</Text>
+                        <Text style={styles.normalText} numberOfLines={1}>{details.title} - {details.vote_average}/10</Text>
                         <Text style={styles.normalText}>2017-09-12 10:06</Text>
+                        {/*TODO: what inside this text */}
                     </View>
                 </View>
             </Swipeout>
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {}
+}
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        deleteReminderMovies: () => {
+            dispatch(deleteReminderMovies(props.details))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReminderItem);
 
 const styles = StyleSheet.create({
     item: {
@@ -71,7 +90,7 @@ const styles = StyleSheet.create({
         borderBottomColor: 'cyan', borderBottomWidth: 0.5,
     },
     normalText: {
-        fontSize: 20
+        fontSize: 18
     },
     image: {
         height: width * 3 / 10, width: width * 3 / 10
