@@ -45,14 +45,6 @@ export class Header extends Component {
                 {this.props.isShowListIcon != false ?
                     <TouchableOpacity
                         onPress={() => {
-                            // let newDisplayMode = this.state.display_mode == 'detail' ? 'grid' : 'detail'
-                            // this.props.navigation.state.params.changeDisplayMode(newDisplayMode);
-                            // this.setState((previousState) => {
-                            //     return {
-                            //         ...previousState,
-                            //         display_mode: newDisplayMode,
-                            //     }
-                            // })
                             this.props.changDisplayMode();
                         }}
                     >
@@ -67,8 +59,7 @@ export class Header extends Component {
     }
 }
 
-
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, props) => {
     return {
         display_mode: state.display_mode,
     }

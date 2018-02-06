@@ -16,23 +16,25 @@ export class FavoriteIcon extends Component {
                     source={require('../images/heart.png')}
                     style={{ height: 26, width: 26, tintColor: this.props.tintColor }}
                 />
-                <View style={{
-                    position: 'absolute',
-                    height: 20,
-                    width: 20,
-                    borderRadius: 10,
-                    backgroundColor: 'red',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    left: 20, top: -15
-                }}>
-                    <Text style={{ fontSize: 10, color: "white" }}>{this.props.numberOfFavoriteMovies}</Text>
-                </View>
+                {this.props.numberOfFavoriteMovies != 0 ?
+                    <View style={{
+                        position: 'absolute',
+                        height: 20,
+                        width: 20,
+                        borderRadius: 10,
+                        backgroundColor: 'red',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        left: 20, top: -15
+                    }}>
+                        <Text style={{ fontSize: 10, color: "white" }}>{this.props.numberOfFavoriteMovies}</Text>
+                    </View>
+                    : <View />
+                }
             </View>
         );
     }
 }
-
 
 const mapStateToProps = (state) => {
 

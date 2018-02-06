@@ -2,10 +2,12 @@ import { combineReducers } from 'redux';
 
 import {
     LOAD_MOVIES,
+    LOAD_MORE_MOVIES,
+    SET_MOVIE_TYPE,
     CHANGE_DISPLAY_MODE,
     TOGGLE_FAVORITE_MOVIE,
     ADD_REMINDER_MOVIES,
-    DELETE_REMINDER_MOVIES
+    DELETE_REMINDER_MOVIES,
 } from '../actions/actionTypes';
 
 import { AsyncStorage } from 'react-native';
@@ -14,7 +16,8 @@ const defaultState = {
     display_mode: 'detail',
     favoriteMovies: [],
     reminderMovies: [],
-    movieType: 'popular'
+    movieType: 'popular',
+    page: 1
 }
 
 const reducers = (state = defaultState, action) => {
@@ -25,6 +28,19 @@ const reducers = (state = defaultState, action) => {
             return {
                 ...state,
                 movies: action.movies
+            }
+
+        case LOAD_MORE_MOVIES:
+            return {
+                ...state,
+                movies: state.movies.concat(action.movies),
+                page: action.page
+            }
+
+        case SET_MOVIE_TYPE:
+            return {
+                ...state,
+                movieType: action.movieType
             }
 
         case CHANGE_DISPLAY_MODE:

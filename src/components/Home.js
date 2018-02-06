@@ -11,7 +11,7 @@ import DetailItem from './DetailItem';
 import GridItem from './GridItem';
 import Header from './Header';
 
-import { loadMovies } from '../actions';
+import { loadMovies, loadMoreMovies } from '../actions';
 import { connect } from 'react-redux';
 
 var { height, width } = Dimensions.get('window');
@@ -20,12 +20,8 @@ export class Home extends Component {
 
     constructor(props) {
         super(props);
-        this.props.loadMovies();
         this.state = {
-            movies: [],
-            refreshing: false,
-            pageLoading: 1,
-            display_mode: 'detail'
+            refreshing: false
         }
     }
 
@@ -35,6 +31,10 @@ export class Home extends Component {
         let header = (<Header navigation={navigation} title={params.title} />)
 
         return { header };
+    }
+
+    componentWillMount() {
+        this.props.loadMovies(this.props.movieType);
     }
 
     _changeDisplayMode = (display_mode = 'detail') => {
@@ -51,15 +51,10 @@ export class Home extends Component {
             return (
                 <FlatList
                     refreshing={this.state.refreshing}
+                    onRefresh={() => { this.props.loadMovies() }}
 
-                    onRefresh={() => {
-                        this.setState((previousState) => {
-                            return {
-                                ...previousState, refreshing: true
-                            }
-                        })
-                        //this.fetchData()
-                    }}
+                    onEndReachedThreshold={0.1}
+                    onEndReached={() => { this.props.loadMoreMovies(this.props.page, this.props.movieType) }}
 
                     data={this.props.movies}
                     keyExtractor={(item, index) => item.id}
@@ -81,27 +76,42 @@ export class Home extends Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log('Reminder: ', state.reminderMovies)
+    console.log('state', state);
     return {
         movies: state.movies,
         display_mode: state.display_mode,
+        movieType: state.movieType,
+        page: state.page
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadMovies: () => {
-
-            url = "https://api.themoviedb.org/3/movie/popular?api_key=0267c13d8c7d1dcddb40001ba6372235";
+        loadMovies: (movieType) => {
+            url = "https://api.themoviedb.org/3/movie/" + movieType + "?api_key=0267c13d8c7d1dcddb40001ba6372235";
 
             fetch(url)
                 .then((response) => response.json())
                 .then((res) => {
-                    dispatch(loadMovies(res.results));
+                    dispatch(loadMovies(res.results))
                 })
                 .catch((err) => {
                     console.log(err);
                     dispatch(loadMovies([]))
+                })
+        },
+        loadMoreMovies: (page, movieType) => {
+            page = page + 1;
+
+            url = "https://api.themoviedb.org/3/movie/" + movieType + "?api_key=0267c13d8c7d1dcddb40001ba6372235&page=" + page;
+
+            fetch(url)
+                .then((response) => response.json())
+                .then((res) => {
+                    dispatch(loadMoreMovies(res.results, page))
+                })
+                .catch((err) => {
+                    console.log(err);
                 })
         }
     };

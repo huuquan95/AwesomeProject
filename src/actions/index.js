@@ -1,15 +1,32 @@
 import {
     LOAD_MOVIES,
+    LOAD_MORE_MOVIES,
+    SET_MOVIE_TYPE,
     CHANGE_DISPLAY_MODE,
     TOGGLE_FAVORITE_MOVIE,
     ADD_REMINDER_MOVIES,
-    DELETE_REMINDER_MOVIES
+    DELETE_REMINDER_MOVIES,
 } from './actionTypes';
 
 export const loadMovies = (movies = [], movieType = 'popular') => {
     return {
         type: LOAD_MOVIES,
         movies: movies,
+        movieType: movieType
+    }
+}
+
+export const loadMoreMovies = (movies = [], page = 2) => {
+    return {
+        type: LOAD_MORE_MOVIES,
+        movies: movies,
+        page: page
+    }
+}
+
+export const setMovieType = (movieType) => {
+    return {
+        type: SET_MOVIE_TYPE,
         movieType: movieType
     }
 }

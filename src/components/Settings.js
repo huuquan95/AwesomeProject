@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import Header from './Header';
 
-import { loadMovies } from '../actions';
+import { setMovieType } from '../actions';
 import { connect } from 'react-redux';
 
 var { height, width } = Dimensions.get('window');
@@ -40,7 +40,7 @@ export class Settings extends Component {
 
                     <TouchableOpacity
                         onPress={() => {
-                            this.props.loadMovies('popular');
+                            this.props.setMovieType('popular');
                             this.props.navigation.navigate('Home', { type: 'popular', title: 'Popular' });
                         }}
                     >
@@ -51,7 +51,7 @@ export class Settings extends Component {
 
                     <TouchableOpacity
                         onPress={() => {
-                            this.props.loadMovies('top_rated');
+                            this.props.setMovieType('top_rated');
                             this.props.navigation.navigate('Home', { type: 'top_rated', title: 'Top Rated' });
                         }}
                         style={{
@@ -66,7 +66,7 @@ export class Settings extends Component {
 
                     <TouchableOpacity
                         onPress={() => {
-                            this.props.loadMovies('upcoming');
+                            this.props.setMovieType('upcoming');
                             this.props.navigation.navigate('Home', { type: 'upcoming', title: 'Up Coming' });
                         }}
                     >
@@ -77,7 +77,7 @@ export class Settings extends Component {
 
                     <TouchableOpacity
                         onPress={() => {
-                            this.props.loadMovies('now_playing');
+                            this.props.setMovieType('now_playing');
                             this.props.navigation.navigate('Home', { type: 'now_playing', title: 'Now Playing' });
                         }}
                         style={{
@@ -156,19 +156,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadMovies: (moviesType) => {
-
-            url = "https://api.themoviedb.org/3/movie/" + moviesType + "?api_key=0267c13d8c7d1dcddb40001ba6372235";
-
-            fetch(url)
-                .then((response) => response.json())
-                .then((res) => {
-                    dispatch(loadMovies(res.results, moviesType));
-                })
-                .catch((err) => {
-                    console.log(err);
-                    dispatch(loadMovies())
-                })
+        setMovieType: (moviesType) => {
+            dispatch(setMovieType(moviesType))
         }
     };
 }
