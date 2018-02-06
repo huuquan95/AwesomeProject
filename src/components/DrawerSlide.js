@@ -7,9 +7,11 @@ import {
     View, Image, Dimensions, ScrollView, TouchableOpacity, AsyncStorage
 } from 'react-native';
 
+import { connect } from 'react-redux';
+
 var { height, width } = Dimensions.get('window');
 
-export default class DrawerSlide extends Component {
+export class DrawerSlide extends Component {
 
     constructor(props) {
         super(props);
@@ -27,7 +29,7 @@ export default class DrawerSlide extends Component {
             this.setState({ name: name });
         } catch (err) { console.log('Err Name: ', err) }
     }
-    
+
     componentDidUpdate() {
         this.getInfo()
     }
@@ -96,32 +98,58 @@ export default class DrawerSlide extends Component {
                     <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Edit</Text>
                 </TouchableOpacity>
 
-                <Text style={{ fontWeight: 'bold' }}>Reminder List:</Text>
-
-                <View style={{ marginTop: 5, padding: 5, backgroundColor: '#20BCBC' }}>
-                    <Text>The Dark Tower - 2017 - 5.6/10</Text>
-                    <Text>2017-09-02 10:06</Text>
-                </View>
-                <View style={{ marginTop: 5, padding: 5, backgroundColor: '#20BCBC' }}>
-                    <Text>Ananbelle: Creation - 2017 - 6.4/10</Text>
-                    <Text>2017-09-03 10:06</Text>
-                </View>
-
-                <TouchableOpacity
-                    onPress={() => {
-                        this.props.navigation.navigate("Reminder")
-                    }}
-                    style={{
-                        alignSelf: 'center', alignItems: 'center', justifyContent: 'center',
-                        backgroundColor: "#394AA5",
-                        height: 35, width: 80,
-                        borderRadius: 10,
-                        marginTop: 10, marginBottom: 5
-                    }}>
-                    <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Show All</Text>
-                </TouchableOpacity>
+                {
+                    this.props.reminderMovies.length != 0 ?
+                        <Text style={{ fontWeight: 'bold' }}>Reminder List:</Text>
+                        : <View />
+                }
+                {
+                    this.props.reminderMovies.length >= 1 ?
+                        <View style={{ marginTop: 5, padding: 5, backgroundColor: '#20BCBC' }}>
+                            <Text>{this.props.reminderMovies[0].title} - {this.props.reminderMovies[0].vote_average}/10</Text>
+                            <Text>2017-09-02 10:06</Text>
+                        </View>
+                        : <View />
+                }
+                {
+                    this.props.reminderMovies.length >= 2 ?
+                        <View style={{ marginTop: 5, padding: 5, backgroundColor: '#20BCBC' }}>
+                            <Text>{this.props.reminderMovies[1].title} - {this.props.reminderMovies[1].vote_average}/10</Text>
+                            <Text>2017-09-02 10:06</Text>
+                        </View>
+                        : <View />
+                }
+                {
+                    this.props.reminderMovies.length != 0 ?
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.props.navigation.navigate("Reminder")
+                            }}
+                            style={{
+                                alignSelf: 'center', alignItems: 'center', justifyContent: 'center',
+                                backgroundColor: "#394AA5",
+                                height: 35, width: 80,
+                                borderRadius: 10,
+                                marginTop: 10, marginBottom: 5
+                            }}>
+                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Show All</Text>
+                        </TouchableOpacity>
+                        : <View />
+                }
                 <Text style={{ alignSelf: 'center' }}>CopyRight@Enclave 2018</Text>
             </ScrollView >
         );
     }
 }
+
+const mapStateToProps = (state, props) => {
+    return {
+        reminderMovies: state.reminderMovies
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DrawerSlide);

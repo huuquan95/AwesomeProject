@@ -76,7 +76,6 @@ export class Home extends Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log('state', state);
     return {
         movies: state.movies,
         display_mode: state.display_mode,
