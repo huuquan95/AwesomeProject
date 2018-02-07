@@ -33,7 +33,11 @@ export default class GridItem extends Component {
                         source={{ uri: 'https://image.tmdb.org/t/p/w185/' + details.poster_path }}
                         style={styles.image}
                     ></Image>
-                    <Text style={styles.text} numberOfLines={2}>  {details.title}</Text>
+                    <View
+                        style={{ justifyContent: 'center', height: 50 }}
+                    >
+                        <Text style={styles.text} numberOfLines={2}>  {details.title}</Text>
+                    </View>
                 </TouchableOpacity>
             </View>
         );
@@ -47,6 +51,6 @@ const styles = StyleSheet.create({
     text: {
         color: 'black', fontSize: 20, fontWeight: 'bold',
         textAlign: 'center',
-        height: 55, width: width / 2 - 15
+        width: width / 2 - 15
     }
 });

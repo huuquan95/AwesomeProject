@@ -7,6 +7,7 @@ import {
     View, Image, TouchableHighlight, TouchableOpacity, Dimensions, ScrollView,
     FlatList, Alert
 } from 'react-native';
+import DateTimePicker from 'react-native-modal-datetime-picker';
 
 import { toggleFavoriteMovie, addReminderMovies } from '../actions';
 import { connect } from 'react-redux';
@@ -20,7 +21,9 @@ export class MovieDatail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            actors: []
+            actors: [],
+            isDateTimePickerVisible: false,
+            date: "11/26/1995",
         }
     }
 
@@ -50,6 +53,20 @@ export class MovieDatail extends Component {
         return { header };
     }
 
+    _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
+
+    _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
+
+    _handleDatePicked = (date) => {
+        this.setState((previousState) => {
+            return {
+                ...previousState,
+                date: ((date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear())
+            }
+        })
+        this._hideDateTimePicker();
+    }
+
     componentWillMount() {
         fetch('https://api.themoviedb.org/3/movie/' +
             this.props.navigation.state.params.details.id +
@@ -70,6 +87,13 @@ export class MovieDatail extends Component {
         var { details } = this.props.navigation.state.params;
         return (
             <ScrollView>
+                <DateTimePicker
+                    isVisible={this.state.isDateTimePickerVisible}
+                    onConfirm={this._handleDatePicked}
+                    onCancel={this._hideDateTimePicker}
+                    mode={'datetime'}
+                    date={new Date(this.state.date)}
+                />
                 <View style={styles.item}>
 
                     <View style={{ flexDirection: 'row' }}>
@@ -117,7 +141,10 @@ export class MovieDatail extends Component {
                             />
 
                             <TouchableOpacity
-                                onPress={() => { this.props.addReminderMovies() }}
+                                onPress={() => {
+                                    this._showDateTimePicker();
+                                    this.props.addReminderMovies();
+                                }}
 
                                 style={{
                                     width: 120, paddingTop: 5, paddingBottom: 5, marginTop: 15,

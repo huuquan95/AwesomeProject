@@ -66,7 +66,7 @@ export default class EditProfile extends Component {
             }
         })
         this._hideDateTimePicker();
-    };
+    }
 
     render() {
         return (
