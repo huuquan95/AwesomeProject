@@ -12,6 +12,7 @@
     "react-native": "^0.52.2",
     "react-native-image-picker": "^0.26.7",
     "react-native-modal-datetime-picker": "^4.13.0",
+    "react-native-push-notification": "^3.0.2",
     "react-native-search-box": "0.0.13",
     "react-native-super-grid": "^2.0.2",
     "react-native-swipeout": "^2.3.3",

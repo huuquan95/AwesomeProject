@@ -23,7 +23,6 @@ export class MovieDatail extends Component {
         this.state = {
             actors: [],
             isDateTimePickerVisible: false,
-            date: "11/26/1995",
         }
     }
 
@@ -57,14 +56,10 @@ export class MovieDatail extends Component {
 
     _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
 
-    _handleDatePicked = (date) => {
-        this.setState((previousState) => {
-            return {
-                ...previousState,
-                date: ((date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear())
-            }
-        })
+    _handleDatePicked = (reminderTime) => {
         this._hideDateTimePicker();
+        this.props.addReminderMovies(reminderTime);
+
     }
 
     componentWillMount() {
@@ -92,7 +87,7 @@ export class MovieDatail extends Component {
                     onConfirm={this._handleDatePicked}
                     onCancel={this._hideDateTimePicker}
                     mode={'datetime'}
-                    date={new Date(this.state.date)}
+                    date={new Date()}
                 />
                 <View style={styles.item}>
 
@@ -142,8 +137,10 @@ export class MovieDatail extends Component {
 
                             <TouchableOpacity
                                 onPress={() => {
-                                    this._showDateTimePicker();
-                                    this.props.addReminderMovies();
+                                    if (!this.props.isRemindered)
+                                        this._showDateTimePicker()
+                                    else
+                                        alert('It has been remindered.')
                                 }}
 
                                 style={{
@@ -207,11 +204,17 @@ export class MovieDatail extends Component {
 }
 
 const mapStateToProps = (state, props) => {
+
+    var { details } = props.navigation.state.params;
+
     return {
         isFavorite: state.favoriteMovies
             .map(movie => { return movie.id })
-            .indexOf(props.navigation.state.params.details.id) != -1 ? true : false,
-        favoriteMovies: state.favoriteMovies
+            .indexOf(details.id) != -1 ? true : false,
+        favoriteMovies: state.favoriteMovies,
+        isRemindered: state.reminderMovies
+            .map(movie => { return movie.id })
+            .indexOf(details.id) != -1 ? true : false,
     }
 }
 
@@ -220,8 +223,8 @@ const mapDispatchToProps = (dispatch, props) => {
         toggleFavoriteMovie: () => {
             dispatch(toggleFavoriteMovie(props.navigation.state.params.details))
         },
-        addReminderMovies: () => {
-            dispatch(addReminderMovies(props.navigation.state.params.details))
+        addReminderMovies: (reminderTime) => {
+            dispatch(addReminderMovies(props.navigation.state.params.details, reminderTime))
         }
     };
 }

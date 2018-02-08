@@ -44,10 +44,10 @@ export const toggleFavoriteMovie = (movie) => {
     }
 }
 
-export const addReminderMovies = (movie) => {
+export const addReminderMovies = (movie, reminderTime) => {
     return {
         type: ADD_REMINDER_MOVIES,
-        movie: movie
+        movie: { ...movie, reminderTime: reminderTime }
     }
 }
 
