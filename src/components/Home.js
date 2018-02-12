@@ -51,7 +51,7 @@ export class Home extends Component {
             return (
                 <FlatList
                     refreshing={this.state.refreshing}
-                    onRefresh={() => { this.props.loadMovies() }}
+                    onRefresh={() => { this.props.loadMovies(this.props.movieType) }}
 
                     onEndReachedThreshold={0.1}
                     onEndReached={() => { this.props.loadMoreMovies(this.props.page, this.props.movieType) }}
@@ -86,7 +86,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadMovies: (movieType) => {
+        loadMovies: (movieType = "popular") => {
             url = "https://api.themoviedb.org/3/movie/" + movieType + "?api_key=0267c13d8c7d1dcddb40001ba6372235";
 
             fetch(url)

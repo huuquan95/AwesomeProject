@@ -37,13 +37,32 @@ export default class EditProfile extends Component {
         try {
             let name = await AsyncStorage.getItem('name');
             this.setState({ name: name });
+            let date = await AsyncStorage.getItem('date');
+            this.setState({ date: date });
+            let email = await AsyncStorage.getItem('email');
+            this.setState({ email: email });
         } catch (err) { console.log('Err GetInfo: ', err) }
     }
 
     saveInfo = async () => {
+
         try {
             await AsyncStorage.setItem('name', this.state.name)
-        } catch (err) { console.log('Err SaveInfo: ', err) }
+        } catch (err) {
+            console.log('Edit Profile Save name: ', err)
+        }
+
+        try {
+            await AsyncStorage.setItem('date', this.state.date)
+        } catch (err) {
+            console.log('Edit Profile Save date: ', err)
+        }
+
+        try {
+            await AsyncStorage.setItem('email', this.state.email)
+        } catch (err) {
+            console.log('Edit Profile Save email: ', err)
+        }
     }
 
     componentWillMount() {
@@ -71,32 +90,20 @@ export default class EditProfile extends Component {
     render() {
         return (
             <View
-                style={{ marginTop: 25, marginLeft: 10, marginRight: 10 }}
+                style={styles.container}
             >
                 <View
-                    style={{
-                        flexDirection: 'row', justifyContent: 'space-between',
-
-                    }}
+                    style={styles.containerInside}
                 >
                     <TouchableOpacity
                         onPress={() => { this.props.navigation.navigate('Tabs') }}
-                        style={{
-                            alignItems: 'center', justifyContent: 'center',
-                            backgroundColor: "#20BCBC",
-                            height: 35, width: 80,
-                            borderRadius: 10
-                        }}>
-                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Cancel</Text>
+                        style={styles.cancleButton}>
+                        <Text style={styles.buttonText}>Cancel</Text>
                     </TouchableOpacity>
                     <View>
                         <TouchableOpacity
                             onPress={() => {
                                 ImagePicker.launchImageLibrary(options, (response) => {
-                                    // });
-                                    // ImagePicker.showImagePicker(options, (response) => {
-                                    console.log('Response = ', response);
-
                                     if (response.didCancel) {
                                         console.log('User cancelled image picker');
                                     }
@@ -109,9 +116,6 @@ export default class EditProfile extends Component {
                                     else {
                                         let source = { uri: response.uri };
                                         console.log('uri: ', source)
-                                        // You can also display the image using data:
-                                        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-
                                         this.setState({
                                             avatarSource: source
                                         });
@@ -124,14 +128,11 @@ export default class EditProfile extends Component {
                                     this.state.avatarSource == null ?
                                         require(`../images/default_avatar.png`)
                                         : this.state.avatarSource}
-                                style={{
-                                    width: width / 2, height: width / 2,
-                                    borderRadius: width / 4
-                                }}
+                                style={styles.avatar}
                             />
                         </TouchableOpacity>
                         <TextInput
-                            style={{ fontWeight: 'bold', textAlign: 'center', marginTop: 10 }}
+                            style={styles.name}
                             onChangeText={(text) => this.setState({ name: text })}
                             value={this.state.name} />
                     </View>
@@ -140,62 +141,56 @@ export default class EditProfile extends Component {
                             this.saveInfo()
                             this.props.navigation.navigate('Tabs')
                         }}
-                        style={{
-                            alignItems: 'center', justifyContent: 'center',
-                            backgroundColor: "#057AFF",
-                            height: 35, width: 80,
-                            borderRadius: 10
-                        }}>
-                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Done</Text>
+                        style={styles.doneButton}>
+                        <Text style={styles.buttonText}>Done</Text>
                     </TouchableOpacity>
                 </View>
 
                 <TouchableOpacity
                     onPress={this._showDateTimePicker}
-                    style={{ flexDirection: 'row', alignItems: 'center', margin: 5 }}>
+                    style={styles.infoItem}>
                     <Image
                         source={require('../images/birthday.png')}
-                        style={{ width: 24, height: 24 }}
+                        style={styles.icon}
                     />
-                    <Text style={{ marginLeft: 10 }}>{this.state.date}</Text>
+                    <Text>{this.state.date}</Text>
                 </TouchableOpacity>
 
                 <View
-                    style={{ flexDirection: 'row', alignItems: 'center', margin: 5 }}>
+                    style={styles.infoItem}>
                     <Image
                         source={require('../images/email.png')}
-                        style={{ width: 24, height: 24 }}
+                        style={styles.icon}
                     />
-                    <Text style={{ marginLeft: 10 }}>{this.state.email}</Text>
+                    <Text>{this.state.email}</Text>
                 </View>
-
                 <View
-                    style={{ flexDirection: 'row', alignItems: 'center', margin: 5 }}>
+                    style={styles.infoItem}>
                     <Image
                         source={require('../images/gender.png')}
-                        style={{ width: 24, height: 24 }}
+                        style={styles.icon}
                     />
 
                     <View
-                        style={{ flexDirection: 'row' }}
-                    >
+                        style={{ flexDirection: 'row', alignItems: 'center' }}>
 
                         <RadioButton
+                            outerCircleColor='black'
+                            innerCircleColor='black'
                             currentValue={this.state.isMale}
                             value={0}
                             onPress={this.handleOnPress.bind(this)}
-                        >
-                            <Text>Male</Text>
-                        </RadioButton>
+                        />
+                        <Text style={{ marginRight: 50 }}>Male</Text>
 
                         <RadioButton
+                            outerCircleColor='black'
+                            innerCircleColor='black'
                             currentValue={this.state.isMale}
                             value={1}
                             onPress={this.handleOnPress.bind(this)}
-                        >
-                            <Text>Female</Text>
-                        </RadioButton>
-
+                        />
+                        <Text>Female</Text>
                     </View>
                 </View>
                 <DateTimePicker
@@ -211,8 +206,40 @@ export default class EditProfile extends Component {
 }
 
 const styles = StyleSheet.create({
-    icon: {
-        width: 26,
-        height: 26,
+    container: {
+        marginTop: 25, marginLeft: 10, marginRight: 10
     },
+    containerInside: {
+        flexDirection: 'row', justifyContent: 'space-between',
+    },
+    icon: {
+        width: 24,
+        height: 24,
+        marginRight: 10
+    },
+    cancleButton: {
+        alignItems: 'center', justifyContent: 'center',
+        backgroundColor: "#20BCBC",
+        height: 35, width: 80,
+        borderRadius: 10
+    },
+    buttonText: {
+        color: 'white', fontWeight: 'bold', fontSize: 16
+    },
+    avatar: {
+        width: width / 2, height: width / 2,
+        borderRadius: width / 4
+    },
+    name: {
+        fontWeight: 'bold', textAlign: 'center', marginTop: 10
+    },
+    doneButton: {
+        alignItems: 'center', justifyContent: 'center',
+        backgroundColor: "#057AFF",
+        height: 35, width: 80,
+        borderRadius: 10
+    },
+    infoItem: {
+        flexDirection: 'row', alignItems: 'center', margin: 5
+    }
 });

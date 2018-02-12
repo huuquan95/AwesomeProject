@@ -124,7 +124,7 @@ const Drawer = DrawerNavigator(
         }
     },
     {
-        contentComponent: props => <DrawerSlide {...props} />,
+        contentComponent: props => <DrawerSlide {...props} />
     }
 )
 

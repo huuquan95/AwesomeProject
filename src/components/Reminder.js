@@ -45,7 +45,7 @@ export class Reminder extends Component {
 
                 <Text
                     style={{ fontSize: 20, color: 'white' }}
-                >Reminder</Text>
+                >All Reminders</Text>
                 <View style={{ width: 80 }}></View>
             </View>
         );
