@@ -6,6 +6,8 @@ import {
     Text,
     View, Image, Dimensions, ScrollView, TouchableOpacity, AsyncStorage
 } from 'react-native';
+import realm from '../databases/allSchemas';
+import { queryAllInfos } from '../databases/allSchemas';
 
 import { connect } from 'react-redux';
 
@@ -16,30 +18,30 @@ export class DrawerSlide extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isMale: 0,
-            date: "01/01/2001",
-            name: 'Your name',
-            email: 'Your email',
+            isMale: 1,
+            date: "01/01/2011",
+            name: 'David John',
+            email: 'john@example.com',
         }
+        this.loadData();
+        realm.addListener('change', () => {
+            this.loadData();
+        });
     }
 
-    getInfo = async () => {
-        try {
-            let name = await AsyncStorage.getItem('name');
-            this.setState({ name: name });
-            let date = await AsyncStorage.getItem('date');
-            this.setState({ date: date });
-            let email = await AsyncStorage.getItem('email');
-            this.setState({ email: email });
-        } catch (err) { console.log('Err GetInfo: ', err) }
-    }
-
-    forceUpdate(){
-     //   this.getInfo()
-    }
-
-    componentWillMount() {
-        this.getInfo()
+    loadData() {
+        queryAllInfos()
+            .then(res => {
+                let info = res[0]
+                let date = info.date
+                this.setState({
+                    name: info.name,
+                    date: (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear(),
+                    isMale: info.isMale,
+                    email: info.email
+                })
+            })
+            .catch(err => console.log(err))
     }
 
     formatDate(date) {

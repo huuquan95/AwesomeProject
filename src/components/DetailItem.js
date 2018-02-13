@@ -6,6 +6,7 @@ import {
     Text, Alert,
     View, Image, TouchableOpacity, Dimensions
 } from 'react-native';
+import { insertFavoriteMovies, deleteFavoriteMovies, queryAllFavoriteMovies } from '../databases/allSchemas';
 
 import { toggleFavoriteMovie } from '../actions';
 import { connect } from 'react-redux';
@@ -15,6 +16,29 @@ const starUnchecked = require('../images/star_unchecked.png');
 var { height, width } = Dimensions.get('window');
 
 export class DetailItem extends Component {
+
+    toggleFavoriteMovie() {
+        if (this.props.isFavorite) {
+            deleteFavoriteMovies(this.props.details.id)
+                .then()
+                .catch(err => console.log(err))
+        }
+        else {
+            let { details } = this.props;
+            let movie = {
+                id: details.id,
+                title: details.title,
+                poster_path: details.poster_path,
+                release_date: details.release_date,
+                vote_average: details.vote_average,
+                overview: details.overview
+            }
+
+            insertFavoriteMovies(movie)
+                .then(res => console.log('insertFavoriteMovie', res))
+                .catch(err => console.log(err))
+        }
+    }
 
     render() {
         var {
@@ -45,12 +69,12 @@ export class DetailItem extends Component {
                                     [{ text: 'Cancel' },
                                     {
                                         text: 'OK',
-                                        onPress: () => { this.props.toggleFavoriteMovie() }
+                                        onPress: () => { this.toggleFavoriteMovie() }
                                     }]
                                 )
                             }
                             else {
-                                this.props.toggleFavoriteMovie()
+                                this.toggleFavoriteMovie()
                             }
                         }}
                     >
@@ -111,12 +135,7 @@ const mapStateToProps = (state, props) => {
 }
 
 const mapDispatchToProps = (dispatch, props) => {
-
-    return {
-        toggleFavoriteMovie: () => {
-            dispatch(toggleFavoriteMovie(props.details))
-        }
-    };
+    return {}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetailItem);

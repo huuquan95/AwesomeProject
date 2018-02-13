@@ -9,7 +9,10 @@ import {
 import Header from './Header';
 import DetailItem from './DetailItem';
 import Search from 'react-native-search-box';
+import realm from '../databases/allSchemas';
+import { queryAllFavoriteMovies } from '../databases/allSchemas';
 
+import { loadFavoriteMovies } from '../actions';
 import { connect } from 'react-redux';
 
 export class Favorites extends Component {
@@ -19,6 +22,19 @@ export class Favorites extends Component {
         this.state = {
             favoriteMoviesFilter: []
         }
+        this.loadData();
+        realm.addListener('change', () => {
+            this.loadData();
+        });
+    }
+
+    loadData() {
+        queryAllFavoriteMovies()
+            .then(res => {
+                this.props.loadFavoriteMovies(res)
+            })
+            .catch(err => console.log(err))
+
     }
 
     componentWillReceiveProps(nextProps) {
@@ -76,6 +92,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        loadFavoriteMovies: (favoriteMovies) => {
+            dispatch(loadFavoriteMovies(favoriteMovies))
+        }
     };
 }
 

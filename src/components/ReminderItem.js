@@ -77,7 +77,7 @@ export class ReminderItem extends Component {
                     >
                         <Text style={styles.normalText} numberOfLines={1}>
                             {details.title.length >= 18 ? details.title.slice(0, 18) + "..." : details.title}
-                            - {details.vote_average}/10</Text>
+                            - {details.vote_average.toFixed(1)}/10</Text>
                         <Text style={styles.normalText}>{this.formatDate(this.props.details.reminderTime)}</Text>
                     </View>
                     <TouchableOpacity

@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import {
     LOAD_MOVIES,
     LOAD_MORE_MOVIES,
+    LOAD_FAVORITE_MOVIE,
     SET_MOVIE_TYPE,
     CHANGE_DISPLAY_MODE,
     TOGGLE_FAVORITE_MOVIE,
@@ -79,8 +80,13 @@ const reducers = (state = defaultState, action) => {
                     reminderMovies: state.reminderMovies.filter(movie => (movie.id != action.movie.id))
                 }
 
+        case LOAD_FAVORITE_MOVIE:
+            return {
+                ...state,
+                favoriteMovies: action.favoriteMovies
+            }
+
         default:
-            console.log('count')
             return state;
     }
 }

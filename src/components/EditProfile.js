@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import RadioButton from 'radio-button-react-native';
+import { updateInfo, queryAllInfos, insertInfo } from '../databases/allSchemas';
 var { height, width } = Dimensions.get('window');
 
 var ImagePicker = require('react-native-image-picker');
@@ -25,48 +26,28 @@ export default class EditProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isMale: 0,
+            isMale: 1,
             isDateTimePickerVisible: false,
-            date: "11/26/1995",
-            name: 'Quan (Quinto) H. Dinh',
-            email: 'quinto@enclave.vn',
-        }
-    }
-
-    getInfo = async () => {
-        try {
-            let name = await AsyncStorage.getItem('name');
-            this.setState({ name: name });
-            let date = await AsyncStorage.getItem('date');
-            this.setState({ date: date });
-            let email = await AsyncStorage.getItem('email');
-            this.setState({ email: email });
-        } catch (err) { console.log('Err GetInfo: ', err) }
-    }
-
-    saveInfo = async () => {
-
-        try {
-            await AsyncStorage.setItem('name', this.state.name)
-        } catch (err) {
-            console.log('Edit Profile Save name: ', err)
-        }
-
-        try {
-            await AsyncStorage.setItem('date', this.state.date)
-        } catch (err) {
-            console.log('Edit Profile Save date: ', err)
-        }
-
-        try {
-            await AsyncStorage.setItem('email', this.state.email)
-        } catch (err) {
-            console.log('Edit Profile Save email: ', err)
+            date: "01/01/2011",
+            name: 'David John',
+            email: 'john@example.com',
         }
     }
 
     componentWillMount() {
-        this.getInfo()
+        queryAllInfos()
+            .then(res => {
+                let info = res[0]
+                let date = info.date
+                this.setState({
+                    id: info.id,
+                    name: info.name,
+                    date: (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear(),
+                    isMale: info.isMale,
+                    email: info.email
+                })
+            })
+            .catch(err => console.log("Maybe no record inside INFO_SCHEMA table. ", err))
     }
 
     handleOnPress(isMale) {
@@ -136,9 +117,34 @@ export default class EditProfile extends Component {
                             onChangeText={(text) => this.setState({ name: text })}
                             value={this.state.name} />
                     </View>
+
                     <TouchableOpacity
-                        onPress={() => {
-                            this.saveInfo()
+                        onPress={async () => {
+
+                            let isExist = true
+                            await queryAllInfos()
+                                .then(res => {
+                                    isExist = res.length == 0 ? false : true
+                                })
+                                .catch(err => console.log(err))
+
+                            let info = {
+                                id: 1,
+                                name: this.state.name,
+                                date: this.state.date,
+                                email: this.state.email,
+                                isMale: this.state.isMale
+                            }
+
+                            if (isExist) {
+                                updateInfo(info).then()
+                                    .catch((err) => console.log('Error Update UserInformation', err));
+                            }
+                            else {
+                                insertInfo(info).then()
+                                    .catch((err) => console.log('Error Insert UserInformation', err));
+                            }
+
                             this.props.navigation.navigate('Tabs')
                         }}
                         style={styles.doneButton}>
@@ -178,19 +184,19 @@ export default class EditProfile extends Component {
                             outerCircleColor='black'
                             innerCircleColor='black'
                             currentValue={this.state.isMale}
-                            value={0}
+                            value={1}
                             onPress={this.handleOnPress.bind(this)}
                         />
-                        <Text style={{ marginRight: 50 }}>Male</Text>
+                        <Text style={{ marginLeft: 10, marginRight: 50 }}>Male</Text>
 
                         <RadioButton
                             outerCircleColor='black'
                             innerCircleColor='black'
                             currentValue={this.state.isMale}
-                            value={1}
+                            value={0}
                             onPress={this.handleOnPress.bind(this)}
                         />
-                        <Text>Female</Text>
+                        <Text style={{ marginLeft: 10 }}>Female</Text>
                     </View>
                 </View>
                 <DateTimePicker

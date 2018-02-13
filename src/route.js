@@ -15,6 +15,7 @@ import About from './components/About';
 import Settings from './components/Settings';
 import MovieDetail from './components/MovieDetail';
 import Reminder from './components/Reminder';
+import Splash from './components/Splash';
 import { StackNavigator, DrawerNavigator, TabNavigator } from 'react-navigation';
 
 //redux
@@ -129,11 +130,19 @@ const Drawer = DrawerNavigator(
 )
 
 export default class App extends Component {
-    state = {}
+
+    constructor(props) {
+        super(props);
+        this.state = { isLoading: true };
+        setTimeout(() => {
+            this.setState({ isLoading: false })
+        }, 3000)
+    }
+
     render() {
         return (
             <Provider store={store}>
-                <Drawer />
+                {this.state.isLoading ? <Splash /> : <Drawer />}
             </Provider>
         );
     }

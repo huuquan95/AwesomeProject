@@ -1,6 +1,7 @@
 import {
     LOAD_MOVIES,
     LOAD_MORE_MOVIES,
+    LOAD_FAVORITE_MOVIE,
     SET_MOVIE_TYPE,
     CHANGE_DISPLAY_MODE,
     TOGGLE_FAVORITE_MOVIE,
@@ -21,6 +22,13 @@ export const loadMoreMovies = (movies = [], page = 2) => {
         type: LOAD_MORE_MOVIES,
         movies: movies,
         page: page
+    }
+}
+
+export const loadFavoriteMovies = (favoriteMovies) => {
+    return {
+        type: LOAD_FAVORITE_MOVIE,
+        favoriteMovies: favoriteMovies
     }
 }
 
