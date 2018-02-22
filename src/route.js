@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import {
-    Platform,
-    StyleSheet,
-    Text,
-    View, Image, StatusBar
+    Platform, StyleSheet,
+    Text, View, Image, StatusBar
 } from 'react-native';
 import Home from './components/Home';
 import Favorites from './components/Favorites';
@@ -16,7 +14,7 @@ import Settings from './components/Settings';
 import MovieDetail from './components/MovieDetail';
 import Reminder from './components/Reminder';
 import Splash from './components/Splash';
-import { StackNavigator, DrawerNavigator, TabNavigator } from 'react-navigation';
+import { StackNavigator, DrawerNavigator, TabNavigator, TabBarBottom } from 'react-navigation';
 
 //redux
 import { createStore } from 'redux';
@@ -96,6 +94,7 @@ const Tabs = TabNavigator(
         }
     },
     {
+        tabBarComponent: TabBarBottom,
         tabBarPosition: 'bottom',
         animationEnabled: true,
         tabBarOptions: {
@@ -113,7 +112,6 @@ const Tabs = TabNavigator(
         swipeEnabled: true,
     }
 )
-
 
 const Drawer = DrawerNavigator(
     {
@@ -136,7 +134,7 @@ export default class App extends Component {
         this.state = { isLoading: true };
         setTimeout(() => {
             this.setState({ isLoading: false })
-        }, 3000)
+        }, 2000)
     }
 
     render() {

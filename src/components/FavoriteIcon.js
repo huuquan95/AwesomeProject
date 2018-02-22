@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import {
-    Platform,
-    StyleSheet,
-    Text,
-    View, Image
+    Platform, StyleSheet,
+    Text, View, Image
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -25,9 +23,9 @@ export class FavoriteIcon extends Component {
                         backgroundColor: 'red',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        left: 20, top: -15
+                        left: 20, top: Platform.OS === 'ios' ? -15 : 0,
                     }}>
-                        <Text style={{ fontSize: 10, color: "white" }}>{this.props.numberOfFavoriteMovies}</Text>
+                        <Text style={{ fontSize: 10, color: "white" }}>{this.props.numberOfFavoriteMovies > 9 ? '9+' : this.props.numberOfFavoriteMovies}</Text>
                     </View>
                     : <View />
                 }
