@@ -1,9 +1,6 @@
 package com.awesomeproject;
 
 import com.facebook.react.ReactActivity;
-import io.realm.react.RealmReactPackage;
-import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
-import com.imagepicker.ImagePickerPackage;
 
 public class MainActivity extends ReactActivity {
 

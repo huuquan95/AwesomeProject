@@ -6,9 +6,8 @@ import {
     Text, Alert,
     View, Image, TouchableOpacity, Dimensions
 } from 'react-native';
-import { insertFavoriteMovies, deleteFavoriteMovies, queryAllFavoriteMovies } from '../databases/allSchemas';
+import { insertFavoriteMovies, deleteFavoriteMovies } from '../databases/allSchemas';
 
-import { toggleFavoriteMovie } from '../actions';
 import { connect } from 'react-redux';
 
 const starChecked = require('../images/star_checked.png');
@@ -35,7 +34,7 @@ export class DetailItem extends Component {
             }
 
             insertFavoriteMovies(movie)
-                .then(res => console.log('insertFavoriteMovie', res))
+                .then()
                 .catch(err => console.log(err))
         }
     }
@@ -43,13 +42,13 @@ export class DetailItem extends Component {
     render() {
         var {
             details = {
-            id: 123456,
-            title: '...',
-            poster_path: '5CGjlz2vyBhW5xHW4eNOZIdgzYq.jpg',
-            release_date: '...',
-            vote_average: '...',
-            overview: '...'
-        },
+                id: 123456,
+                title: '...',
+                poster_path: '5CGjlz2vyBhW5xHW4eNOZIdgzYq.jpg',
+                release_date: '...',
+                vote_average: '...',
+                overview: '...'
+            },
             navigation } = this.props;
 
         return (
@@ -110,7 +109,6 @@ export class DetailItem extends Component {
                             <Text style={styles.normalText}>Rating:  </Text>
                             <Text style={styles.importantText}>{details.vote_average}/10</Text>
                         </View>
-
                         <Text style={styles.importantText}>Overview:</Text>
 
                         <Text style={[styles.normalText, { width: width * 3 / 5 - 20 }]} numberOfLines={3} >
@@ -129,8 +127,7 @@ const mapStateToProps = (state, props) => {
     return {
         isFavorite: state.favoriteMovies
             .map(movie => { return movie.id })
-            .indexOf(props.details.id) != -1 ? true : false,
-        favoriteMovies: state.favoriteMovies
+            .indexOf(props.details.id) != -1 ? true : false
     }
 }
 

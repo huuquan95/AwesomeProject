@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
-import { toggleFavoriteMovie, addReminderMovies } from '../actions';
+import { insertFavoriteMovies, deleteFavoriteMovies, insertReminderMovies } from '../databases/allSchemas';
 import { connect } from 'react-redux';
 
 const starChecked = require('../images/star_checked.png');
@@ -23,6 +23,31 @@ export class MovieDatail extends Component {
         this.state = {
             actors: [],
             isDateTimePickerVisible: false,
+        }
+    }
+
+    toggleFavoriteMovie() {
+
+        var { details } = this.props.navigation.state.params;
+
+        if (this.props.isFavorite) {
+            deleteFavoriteMovies(details.id)
+                .then()
+                .catch(err => console.log(err))
+        }
+        else {
+            let movie = {
+                id: details.id,
+                title: details.title,
+                poster_path: details.poster_path,
+                release_date: details.release_date,
+                vote_average: details.vote_average,
+                overview: details.overview
+            }
+
+            insertFavoriteMovies(movie)
+                .then()
+                .catch(err => console.log(err))
         }
     }
 
@@ -44,9 +69,9 @@ export class MovieDatail extends Component {
                     />
                 </TouchableOpacity>
 
-                <Text style={{ fontSize: 20, color: 'white', width: width - 100, textAlign: 'center' }} numberOfLines={1}>{navigation.state.params.details.title}</Text>
+                <Text style={{ fontSize: 20, color: 'white', width: width - 88, textAlign: 'center' }} numberOfLines={1}>{navigation.state.params.details.title}</Text>
 
-                <TouchableOpacity></TouchableOpacity>
+                <View style={{ width: 44 }} />
             </View>
         );
         return { header };
@@ -58,8 +83,29 @@ export class MovieDatail extends Component {
 
     _handleDatePicked = (reminderTime) => {
         this._hideDateTimePicker();
-        this.props.addReminderMovies(reminderTime);
 
+        var { details } = this.props.navigation.state.params;
+
+        let movie = {
+            id: details.id,
+            title: details.title,
+            poster_path: details.poster_path,
+            release_date: details.release_date,
+            vote_average: details.vote_average,
+            reminderTime: this.formatDate(reminderTime)
+        }
+
+        insertReminderMovies(movie)
+            .then()
+            .catch(err => console.log(err))
+    }
+
+    formatDate(date) {
+        let month = date.getMonth() + 1;
+        return date.getFullYear() + "-"
+            + (month < 10 ? ("0" + month) : month) + "-"
+            + date.getDate() + " "
+            + date.getHours() + ":" + date.getMinutes()
     }
 
     componentWillMount() {
@@ -79,7 +125,7 @@ export class MovieDatail extends Component {
     }
 
     render() {
-        var { details } = this.props.navigation.state.params;
+        var { details = {} } = this.props.navigation.state.params;
         return (
             <ScrollView>
                 <DateTimePicker
@@ -106,12 +152,14 @@ export class MovieDatail extends Component {
                                         [{ text: 'Cancel' },
                                         {
                                             text: 'OK',
-                                            onPress: () => { this.props.toggleFavoriteMovie() }
+                                            onPress: () => {
+                                                this.toggleFavoriteMovie();
+                                            }
                                         }]
                                     )
                                 }
                                 else {
-                                    this.props.toggleFavoriteMovie()
+                                    this.toggleFavoriteMovie()
                                 }
                             }}
                         >
@@ -123,10 +171,9 @@ export class MovieDatail extends Component {
 
                         <View style={{ justifyContent: 'space-around' }}>
                             <Text>Release date: <Text style={styles.importantText}>{details.release_date}</Text></Text>
-                            <Text>Rating:  <Text style={styles.importantText}>{details.vote_average}</Text></Text>
+                            <Text>Rating:  <Text style={styles.importantText}>{details.vote_average}/10</Text></Text>
                         </View>
                     </View>
-
                     <View style={{ flexDirection: 'row' }}>
                         <View style={{ alignItems: 'center' }}>
 
@@ -211,7 +258,6 @@ const mapStateToProps = (state, props) => {
         isFavorite: state.favoriteMovies
             .map(movie => { return movie.id })
             .indexOf(details.id) != -1 ? true : false,
-        favoriteMovies: state.favoriteMovies,
         isRemindered: state.reminderMovies
             .map(movie => { return movie.id })
             .indexOf(details.id) != -1 ? true : false,
@@ -220,13 +266,10 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        toggleFavoriteMovie: () => {
-            dispatch(toggleFavoriteMovie(props.navigation.state.params.details))
-        },
         addReminderMovies: (reminderTime) => {
             dispatch(addReminderMovies(props.navigation.state.params.details, reminderTime))
         }
-    };
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MovieDatail);
@@ -235,7 +278,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(MovieDatail);
 const styles = StyleSheet.create({
     row1: {
         flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5,
-        width: width - 20
+        width: width - 20,
     },
     directionRow: {
         flexDirection: 'row'

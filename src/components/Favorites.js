@@ -22,6 +22,7 @@ export class Favorites extends Component {
         this.state = {
             favoriteMoviesFilter: []
         }
+        
         this.loadData();
         realm.addListener('change', () => {
             this.loadData();
@@ -30,11 +31,22 @@ export class Favorites extends Component {
 
     loadData() {
         queryAllFavoriteMovies()
+            .then(res =>
+                res.map(movie => {
+                    return {
+                        id: movie.id,
+                        title: movie.title,
+                        poster_path: movie.poster_path,
+                        release_date: movie.release_date,
+                        vote_average: parseFloat(movie.vote_average).toFixed(1),
+                        overview: movie.overview
+                    }
+                })
+            )
             .then(res => {
                 this.props.loadFavoriteMovies(res)
             })
             .catch(err => console.log(err))
-
     }
 
     componentWillReceiveProps(nextProps) {
@@ -63,23 +75,26 @@ export class Favorites extends Component {
     render() {
         return (
             <View>
-                {this.props.favoriteMovies.length <= 2
-                    ? <View />
-                    : <Search
-                        backgroundColor="#C9C9CE"
-                        placeholder=" "
-                        onChangeText={this._onChangeText}
-                        onDelete={this._setFavoriteMoviesFilter}
-                        onCancel={this._setFavoriteMoviesFilter}
-                        inputStyle={{ textAlign: 'center' }}
-                    />
+                {
+                    this.props.favoriteMovies.length <= 2
+                        ? <View />
+                        : <Search
+                            backgroundColor="#C9C9CE"
+                            placeholder=" "
+                            onChangeText={this._onChangeText}
+                            onDelete={this._setFavoriteMoviesFilter}
+                            onCancel={this._setFavoriteMoviesFilter}
+                            inputStyle={{ textAlign: 'center' }}
+                        />
                 }
-                <FlatList
+                < FlatList
+                    style={{ marginBottom: 50 }}
                     data={this.state.favoriteMoviesFilter}
-                    keyExtractor={(item, index) => index}
+                    keyExtractor={(item, index) => index
+                    }
                     renderItem={({ item }) => <DetailItem details={item} navigation={this.props.navigation} />}
                 />
-            </View>
+            </View >
         );
     }
 }

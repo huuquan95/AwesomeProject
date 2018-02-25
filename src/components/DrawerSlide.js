@@ -32,30 +32,25 @@ export class DrawerSlide extends Component {
     loadData() {
         queryAllInfos()
             .then(res => {
-                let info = res[0]
-                let date = info.date
-                this.setState({
-                    name: info.name,
-                    date: (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear(),
-                    isMale: info.isMale,
-                    email: info.email
-                })
+                if (res.length != 0) {
+                    let info = res[0]
+                    let date = info.date
+                    this.setState({
+                        name: info.name,
+                        date: (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear(),
+                        isMale: info.isMale,
+                        email: info.email,
+                        avatarSource: info.avatarSource
+                    })
+                }
             })
             .catch(err => console.log(err))
-    }
-
-    formatDate(date) {
-        let month = date.getMonth() + 1;
-        return date.getFullYear() + "-"
-            + (month < 10 ? ("0" + month) : month) + "-"
-            + date.getDate() + " "
-            + date.getHours() + ":" + date.getMinutes()
     }
 
     formatTitle(movie) {
         return (movie.title.length >= 18 ? movie.title.slice(0, 18) + "..." : movie.title)
             + " - "
-            + movie.reminderTime.getFullYear()
+            + movie.release_date.slice(0, 4)
             + " - " + movie.vote_average
             + "/10"
     }
@@ -67,7 +62,7 @@ export class DrawerSlide extends Component {
             return a > b ? 1 : a < b ? -1 : 0;
         })
         return (
-            <ScrollView
+            <View
                 style={styles.scrollView}
             >
                 <View
@@ -75,8 +70,15 @@ export class DrawerSlide extends Component {
                 >
                     <TouchableOpacity
                     >
-                        <Image
+                        {/* <Image
                             source={require('../images/default_avatar.png')}
+                            style={styles.avatar}
+                        /> */}
+                        <Image
+                            source={
+                                this.state.avatarSource == "" ?
+                                    require(`../images/default_avatar.png`)
+                                    : { uri: this.state.avatarSource }}
                             style={styles.avatar}
                         />
                     </TouchableOpacity>
@@ -127,7 +129,7 @@ export class DrawerSlide extends Component {
                     this.props.reminderMovies.length >= 1 ?
                         <View style={styles.reimnderItem}>
                             <Text>{this.formatTitle(this.props.reminderMovies[0])}</Text>
-                            <Text>{this.formatDate(this.props.reminderMovies[0].reminderTime)}</Text>
+                            <Text>{this.props.reminderMovies[0].reminderTime}</Text>
                         </View>
                         : <View />
                 }
@@ -135,7 +137,7 @@ export class DrawerSlide extends Component {
                     this.props.reminderMovies.length >= 2 ?
                         <View style={styles.reimnderItem}>
                             <Text>{this.formatTitle(this.props.reminderMovies[1])}</Text>
-                            <Text>{this.formatDate(this.props.reminderMovies[1].reminderTime)}</Text>
+                            <Text>{this.props.reminderMovies[1].reminderTime}</Text>
                         </View>
                         : <View />
                 }
@@ -151,7 +153,7 @@ export class DrawerSlide extends Component {
                         : <View />
                 }
                 <Text style={styles.bottomText}>CopyRight@Enclave 2018</Text>
-            </ScrollView >
+            </View >
         );
     }
 }
@@ -170,7 +172,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(DrawerSlide);
 
 const styles = StyleSheet.create({
     scrollView: {
-        marginHorizontal: 10
+        marginHorizontal: 10,
     },
     avatar: {
         marginTop: height / 20,

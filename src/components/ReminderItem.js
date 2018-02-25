@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import Swipeout from 'react-native-swipeout';
 import { connect } from 'react-redux';
-import { deleteReminderMovies } from '../actions/index'
+import { deleteReminderMovies } from '../databases/allSchemas';
 
 var { height, width } = Dimensions.get('window');
 
@@ -20,13 +20,6 @@ export class ReminderItem extends Component {
         this.state = {
             opened: false,
         };
-    }
-    formatDate(date) {
-        let month = date.getMonth() + 1;
-        return date.getFullYear() + "-"
-            + (month < 10 ? ("0" + month) : month) + "-"
-            + date.getDate() + " "
-            + date.getHours() + ":" + date.getMinutes()
     }
 
     render() {
@@ -49,7 +42,7 @@ export class ReminderItem extends Component {
                             {
                                 text: 'OK',
                                 onPress: () => {
-                                    this.props.deleteReminderMovies()
+                                    deleteReminderMovies(this.props.details.id)
                                 }
                             }]
                         )
@@ -77,8 +70,8 @@ export class ReminderItem extends Component {
                     >
                         <Text style={styles.normalText} numberOfLines={1}>
                             {details.title.length >= 18 ? details.title.slice(0, 18) + "..." : details.title}
-                            - {details.vote_average.toFixed(1)}/10</Text>
-                        <Text style={styles.normalText}>{this.formatDate(this.props.details.reminderTime)}</Text>
+                            - {details.vote_average}/10</Text>
+                        <Text style={styles.normalText}>{this.props.details.reminderTime}</Text>
                     </View>
                     <TouchableOpacity
                         style={{ alignSelf: 'center', position: 'absolute', right: 5 }}
@@ -102,11 +95,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch, props) => {
-    return {
-        deleteReminderMovies: () => {
-            dispatch(deleteReminderMovies(props.details))
-        }
-    }
+    return {}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReminderItem);

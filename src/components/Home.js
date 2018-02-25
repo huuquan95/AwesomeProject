@@ -10,8 +10,10 @@ import GridView from 'react-native-super-grid';
 import DetailItem from './DetailItem';
 import GridItem from './GridItem';
 import Header from './Header';
+import realm from '../databases/allSchemas';
+import { queryAllReminderMovies } from '../databases/allSchemas';
 
-import { loadMovies, loadMoreMovies } from '../actions';
+import { loadMovies, loadMoreMovies, loadReminderMovies } from '../actions';
 import { connect } from 'react-redux';
 
 var { height, width } = Dimensions.get('window');
@@ -23,6 +25,31 @@ export class Home extends Component {
         this.state = {
             refreshing: false
         }
+
+        this.loadData();
+        realm.addListener('change', () => {
+            this.loadData();
+        });
+    }
+
+    loadData() {
+        queryAllReminderMovies()
+            .then(res =>
+                res.map(movie => {
+                    return {
+                        id: movie.id,
+                        title: movie.title,
+                        poster_path: movie.poster_path,
+                        release_date: movie.release_date,
+                        vote_average: parseFloat(movie.vote_average).toFixed(1),
+                        reminderTime: movie.reminderTime
+                    }
+                })
+            )
+            .then(res => {
+                this.props.loadReminderMovies(res)
+            })
+            .catch(err => console.log(err))
     }
 
     static navigationOptions = ({ navigation }) => {
@@ -84,6 +111,7 @@ const mapStateToProps = (state) => {
     }
 }
 
+//TODO: when fetching data from API, you can optimize by getting only elements you need
 const mapDispatchToProps = (dispatch) => {
     return {
         loadMovies: (movieType = "popular") => {
@@ -112,6 +140,9 @@ const mapDispatchToProps = (dispatch) => {
                 .catch((err) => {
                     console.log(err);
                 })
+        },
+        loadReminderMovies: (reminderMovies) => {
+            dispatch(loadReminderMovies(reminderMovies))
         }
     };
 }

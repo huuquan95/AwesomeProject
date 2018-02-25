@@ -1,6 +1,8 @@
 import Realm from 'realm';
 export const INFO_SCHEMA = "UserInformation";
 export const FAVORITE_SCHEMA = "FavoriteMovies";
+export const REMINDER_SCHEMA = "ReminderMovies";
+
 export const InfoSchema = {
     name: INFO_SCHEMA,
     primaryKey: 'id',
@@ -9,7 +11,8 @@ export const InfoSchema = {
         name: 'string',
         date: 'date',
         email: 'string',
-        isMale: 'int'
+        isMale: 'int',
+        avatarSource: 'string'
     }
 };
 export const FavoriteSchema = {
@@ -24,10 +27,22 @@ export const FavoriteSchema = {
         overview: 'string'
     }
 };
+export const ReminderSchema = {
+    name: REMINDER_SCHEMA,
+    primaryKey: 'id',
+    properties: {
+        id: 'int',
+        title: 'string',
+        poster_path: 'string',
+        release_date: 'string',
+        vote_average: 'float',
+        reminderTime: 'string'
+    }
+};
 
 const databaseOptions = {
-    schema: [InfoSchema, FavoriteSchema],
-    schemaVersion: 3,
+    schema: [InfoSchema, FavoriteSchema, ReminderSchema],
+    schemaVersion: 5,
 };
 
 const defautInfo = { id: 0, name: 'Quinto Dinh', date: '11/26/1995', email: 'quinto@enclave', isMale: 1 }
@@ -50,6 +65,7 @@ export const updateInfo = (info = defautInfo) => new Promise((resolve, reject) =
             updatingInfo.date = info.date;
             updatingInfo.email = info.email;
             updatingInfo.isMale = info.isMale;
+            updatingInfo.avatarSource = info.avatarSource;
             resolve(info);
         });
     })
@@ -92,6 +108,37 @@ export const queryAllFavoriteMovies = () => new Promise((resolve, reject) => {
     Realm.open(databaseOptions).then(realm => {
         let allFavoriteMovies = realm.objects(FAVORITE_SCHEMA);
         resolve(allFavoriteMovies);
+    })
+        .catch((error) => reject(error));;
+});
+
+export const insertReminderMovies = (newMovie) => new Promise((resolve, reject) => {
+
+    Realm.open(databaseOptions).then(realm => {
+        realm.write(() => {
+            realm.create(REMINDER_SCHEMA, newMovie);
+            resolve(newMovie);
+        });
+    })
+        .catch((error) => reject(error));
+});
+
+export const deleteReminderMovies = (movieId) => new Promise((resolve, reject) => {
+    Realm.open(databaseOptions).then(realm => {
+        realm.write(() => {
+            let movie = realm.objectForPrimaryKey(REMINDER_SCHEMA, movieId);
+            realm.delete(movie)
+            resolve();
+        });
+    })
+        .catch((error) => reject(error));
+});
+
+export const queryAllReminderMovies = () => new Promise((resolve, reject) => {
+
+    Realm.open(databaseOptions).then(realm => {
+        let allReminderMovies = realm.objects(REMINDER_SCHEMA);
+        resolve(allReminderMovies);
     })
         .catch((error) => reject(error));;
 });

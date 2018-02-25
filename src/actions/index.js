@@ -5,8 +5,7 @@ import {
     SET_MOVIE_TYPE,
     CHANGE_DISPLAY_MODE,
     TOGGLE_FAVORITE_MOVIE,
-    ADD_REMINDER_MOVIES,
-    DELETE_REMINDER_MOVIES,
+    LOAD_REMINDER_MOVIES
 } from './actionTypes';
 
 export const loadMovies = (movies = [], movieType = 'popular') => {
@@ -52,16 +51,9 @@ export const toggleFavoriteMovie = (movie) => {
     }
 }
 
-export const addReminderMovies = (movie, reminderTime) => {
+export const loadReminderMovies = (reminderMovies) => {
     return {
-        type: ADD_REMINDER_MOVIES,
-        movie: { ...movie, reminderTime: reminderTime }
-    }
-}
-
-export const deleteReminderMovies = (movie) => {
-    return {
-        type: DELETE_REMINDER_MOVIES,
-        movie: movie
+        type: LOAD_REMINDER_MOVIES,
+        reminderMovies: reminderMovies
     }
 }

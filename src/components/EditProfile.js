@@ -37,15 +37,18 @@ export default class EditProfile extends Component {
     componentWillMount() {
         queryAllInfos()
             .then(res => {
-                let info = res[0]
-                let date = info.date
-                this.setState({
-                    id: info.id,
-                    name: info.name,
-                    date: (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear(),
-                    isMale: info.isMale,
-                    email: info.email
-                })
+                if (res.length != 0) {
+                    let info = res[0]
+                    let date = info.date
+                    this.setState({
+                        id: info.id,
+                        name: info.name,
+                        date: (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear(),
+                        isMale: info.isMale,
+                        email: info.email,
+                        avatarSource: info.avatarSource
+                    })
+                }
             })
             .catch(err => console.log("Maybe no record inside INFO_SCHEMA table. ", err))
     }
@@ -98,7 +101,7 @@ export default class EditProfile extends Component {
                                         let source = { uri: response.uri };
                                         console.log('uri: ', source)
                                         this.setState({
-                                            avatarSource: source
+                                            avatarSource: response.uri
                                         });
                                     }
                                 });
@@ -106,9 +109,9 @@ export default class EditProfile extends Component {
                         >
                             <Image
                                 source={
-                                    this.state.avatarSource == null ?
+                                    this.state.avatarSource == "" ?
                                         require(`../images/default_avatar.png`)
-                                        : this.state.avatarSource}
+                                        : { uri: this.state.avatarSource }}
                                 style={styles.avatar}
                             />
                         </TouchableOpacity>
@@ -119,31 +122,29 @@ export default class EditProfile extends Component {
                     </View>
 
                     <TouchableOpacity
-                        onPress={async () => {
-
-                            let isExist = true
-                            await queryAllInfos()
-                                .then(res => {
-                                    isExist = res.length == 0 ? false : true
-                                })
-                                .catch(err => console.log(err))
+                        onPress={() => {
 
                             let info = {
                                 id: 1,
                                 name: this.state.name,
                                 date: this.state.date,
                                 email: this.state.email,
-                                isMale: this.state.isMale
+                                isMale: this.state.isMale,
+                                avatarSource: this.state.avatarSource
                             }
 
-                            if (isExist) {
-                                updateInfo(info).then()
-                                    .catch((err) => console.log('Error Update UserInformation', err));
-                            }
-                            else {
-                                insertInfo(info).then()
-                                    .catch((err) => console.log('Error Insert UserInformation', err));
-                            }
+                            queryAllInfos()
+                                .then(res => {
+                                    if (res.length != 0) {
+                                        updateInfo(info).then()
+                                            .catch((err) => console.log('Error Update UserInformation', err));
+                                    }
+                                    else {
+                                        insertInfo(info).then()
+                                            .catch((err) => console.log('Error Insert UserInformation', err));
+                                    }
+                                })
+                                .catch(err => console.log(err))
 
                             this.props.navigation.navigate('Tabs')
                         }}
